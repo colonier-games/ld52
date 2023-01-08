@@ -21,9 +21,10 @@ function randomTile({ row, col }) {
 }
 
 export class TileRow {
-    constructor({ world, index }) {
-        this.world = world;
+    constructor({ index, chunkId, offset }) {
         this.index = index;
+        this.offset = offset;
+        this.chunkId = chunkId;
         this.tiles = [];
     }
 

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="2" nextobjectid="1">
+ <editorsettings>
+  <export target="test2.json" format="json"/>
+ </editorsettings>
+ <tileset firstgid="1" source="tileset.tsx"/>
+ <layer id="1" name="tiles" width="10" height="10">
+  <data encoding="csv">
+64,9,64,64,64,64,64,64,64,64,
+12,2,64,64,64,64,64,64,64,64,
+64,2,2,2,64,64,64,64,2,10,
+64,64,64,2,64,64,64,64,2,64,
+64,64,64,2,2,2,64,64,2,64,
+64,64,64,64,64,2,64,2,2,64,
+64,64,64,64,64,2,2,2,63,4,
+64,64,64,64,64,64,64,64,2,64,
+64,64,64,64,64,64,64,64,2,64,
+64,64,64,64,64,64,64,64,11,64
+</data>
+ </layer>
+</map>

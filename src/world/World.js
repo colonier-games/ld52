@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { CAMERA_START_POSITION, TUTORIAL_LEVEL_DATA } from '../constants';
 import { Level } from '../level/Level';
+import { Level2 } from '../level/Level2';
 import { createLights } from '../lighting';
 import { Player } from '../player/Player';
 import { RENDERER } from '../renderer';
@@ -23,6 +24,9 @@ function createPerspectiveCamera(pos) {
 export class World {
     constructor() {
         this.scene = new THREE.Scene();
+
+        this.eventListeners = {};
+        this.lastT = 0.0;
         // this.camera = createOrthoCamera(CAMERA_START_POSITION);
         this.camera = createPerspectiveCamera(CAMERA_START_POSITION);
         this.lights = createLights();
@@ -30,19 +34,18 @@ export class World {
 
         this.spawnPosition = [0, 0];
 
-        this.level = new Level({ world: this, tileMapData: TUTORIAL_LEVEL_DATA });
-        this.level.addToScene(this.scene);
+        this.level = new Level2({ world: this });
+        // this.level.addToScene(this.scene);
 
         this.player = new Player({ world: this });
         this.player.addToScene(this.scene);
 
         this.player.teleportTo(this.spawnPosition);
-
-        this.eventListeners = {};
+        this.player.saveCheckpoint();
     }
 
     tileAt([x, y]) {
-        return this.level.tileAt(x, y);
+        return this.level.tileAt([x, y]);
     }
 
     addEventListener(type, listener) {
@@ -58,14 +61,18 @@ export class World {
         }
     }
 
-    update(dt) {
+    update(time) {
+        const dt = (time - this.lastT) / 1000.0;
+        this.lastT = time;
         this.camera.position.set(
             CAMERA_START_POSITION.x + this.player.mesh.position.x,
             CAMERA_START_POSITION.y,
             CAMERA_START_POSITION.z + this.player.mesh.position.z
         );
         this.camera.lookAt(this.player.mesh.position);
-        this.level.updateWalkableMarkers();
+        // this.level.updateWalkableMarkers();
+        this.level.updateVisionMarkers();
+        this.level.updateFallingChunks(dt);
         RENDERER.render(this.scene, this.camera);
     }
 }

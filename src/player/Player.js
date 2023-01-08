@@ -7,7 +7,9 @@ export class Player {
         this.position = [1, 0];
         this.score = 0;
         this.moves = 20;
-        this.lives = 3;
+        this.maxLives = 3;
+        this.lives = this.maxLives;
+        this.checkpoint = [1, 0];
         this.mesh = new THREE.Mesh(
             PLAYER_GEOMETRY,
             PLAYER_MATERIAL
@@ -29,23 +31,48 @@ export class Player {
     }
 
     moveTo([x, y]) {
+        const currentChunkId = this.world.tileAt(this.position).chunkId;
+        this.world.tileAt(this.position).showMandala();
         this.moves--;
         this.teleportTo([x, y]);
+        const newChunkId = this.world.tileAt([x, y]).chunkId;
         if (!this.world.tileAt([x, y]).visited) {
             this.score += this.world.tileAt(this.position).score;
             this.world.dispatchEvent("player-score-changed", this.score);
             this.world.tileAt([x, y]).visited = true;
         }
+        if (this.world.tileAt([x, y]).isCheckpoint) {
+            this.saveCheckpoint();
+        }
         this.world.dispatchEvent("player-moves-changed", this.moves);
         const dmg = this.world.tileAt([x, y]).damage;
         if (dmg) {
-            this.lives -= dmg;
-            this.world.dispatchEvent("player-lives-changed", this.lives);
+            this.kill();
+        }
+
+        if (currentChunkId !== newChunkId) {
+            this.world.dispatchEvent("player-chunk-changed", newChunkId);
         }
     }
 
     teleportTo([x, y]) {
         this.position = [x, y];
         this.mesh.position.copy(this.worldPosition());
+    }
+
+    saveCheckpoint() {
+        this.checkpoint = [...this.position];
+    }
+
+    kill() {
+        this.lives--;
+        this.world.dispatchEvent("player-lives-changed", this.lives);
+        if (this.lives <= 0) {
+            this.world.dispatchEvent("player-died", {
+                score: this.score,
+                moves: this.moves
+            });
+        }
+        this.teleportTo(this.checkpoint);
     }
 }

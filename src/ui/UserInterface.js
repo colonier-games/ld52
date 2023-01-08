@@ -15,7 +15,7 @@ export class UserInterface {
         this.root.render(<UIApp world={this.world} />);
     }
 
-    umount() {
+    unmount() {
         this.root.unmount();
         this.domElement.remove();
     }

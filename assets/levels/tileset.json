@@ -26,6 +26,22 @@
          "id":3
         }, 
         {
+         "class":"visionTrap",
+         "id":4
+        }, 
+        {
+         "class":"visionAward",
+         "id":5
+        }, 
+        {
+         "class":"visionAll",
+         "id":6
+        }, 
+        {
+         "class":"checkpoint",
+         "id":7
+        }, 
+        {
          "class":"spawn",
          "id":62
         }, 

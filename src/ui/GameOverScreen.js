@@ -1,3 +1,4 @@
+import { createRoot } from "react-dom/client";
 import { GameOver } from "./components/GameOver";
 
 export class GameOverScreen {
@@ -12,10 +13,10 @@ export class GameOverScreen {
         document.body.appendChild(this.domElement);
 
         this.root = createRoot(this.domElement);
-        this.root.render(<GameOver world={this.world}  />);
+        this.root.render(<GameOver world={this.world} onReturnToMenu={this.onReturnToMenu} />);
     }
 
-    umount() {
+    unmount() {
         this.root.unmount();
         this.domElement.remove();
     }

@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { IMAGE_ICON_HEART_BROKEN, IMAGE_ICON_HEART_FULL } from "../../constants";
 
 export function UITop({ world }) {
     let [score, setScore] = useState(world.player.score);
@@ -9,7 +10,28 @@ export function UITop({ world }) {
     world.addEventListener("player-lives-changed", setLives);
     world.addEventListener("player-moves-changed", setMoves);
 
+    let heartChildren = [];
+
+    const missing = world.player.maxLives - world.player.lives;
+    const full = world.player.lives;
+    for (let i = 0; i < missing; i++) {
+        heartChildren.push(
+            <img src={IMAGE_ICON_HEART_BROKEN} key={`hm-${i}`} style={{ width: "40px", height: "80px" }} />
+        );
+    }
+    for (let i = 0; i < full; i++) {
+        heartChildren.push(
+            <img src={IMAGE_ICON_HEART_FULL} key={`hf-${i}`} style={{ width: "40px", height: "80px" }} />
+        );
+    }
+
     return <div className="game-ui-top-root">
-        <p>Score: <b>{score}</b> | Lives: <b>{lives}</b> | Moves: <b>{moves}</b></p>
+        <div className="game-ui-top-left-root">
+        </div>
+        <div className="game-ui-top-center-root">
+        </div>
+        <div className="game-ui-top-right-root">
+            {heartChildren}
+        </div>
     </div>
 }

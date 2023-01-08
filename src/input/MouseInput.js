@@ -18,7 +18,6 @@ export class MouseInput {
     }
 
     onClick(event) {
-        console.log(event);
 
         const ndc = mouseEventToNdc(event);
         this.raycaster.setFromCamera(ndc, this.world.camera);
