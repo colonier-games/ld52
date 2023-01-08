@@ -1,0 +1,71 @@
+body,
+html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: white;
+}
+
+.game-ui-root {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.game-ui-top-root {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 32px;
+    color: white;
+}
+
+.game-ui-bottom-root {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 32px;
+    color: white;
+}
+
+.game-ui-left-root {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 128px;
+    height: 100%;
+    color: white;
+}
+
+.game-ui-right-root {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 128px;
+    height: 100%;
+    color: white;
+}
+
+.game-ui-top-root,
+.game-ui-bottom-root,
+.game-ui-left-root,
+.game-ui-right-root {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,0 +1,19 @@
+{
+    "name": "@bokovhu/ld52",
+    "version": "0.0.1",
+    "private": true,
+    "devDependencies": {
+        "@parcel/transformer-sass": "^2.8.2",
+        "parcel": "^2.8.2",
+        "process": "^0.11.10"
+    },
+    "scripts": {
+        "build": "parcel build src/index.html --public-url . --no-cache --dist-dir dist",
+        "serve": "parcel src/index.html --port 8080 --https --no-cache --dist-dir serve-dist"
+    },
+    "dependencies": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "three": "^0.148.0"
+    }
+}
