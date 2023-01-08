@@ -1,15 +1,17 @@
 import * as THREE from 'three';
-import { PLAYER_GEOMETRY, PLAYER_MATERIAL, PLAYER_POSITION_Y, PLAYER_SIZE, TILE_SPACING, TILE_STAIRS_OFFSET } from "../constants";
+import { PLAYER_GEOMETRY, PLAYER_MATERIAL, PLAYER_POSITION_Y, PLAYER_SIZE, SVG_BACKGROUND_ROOM, TILE_SPACING, TILE_STAIRS_OFFSET } from "../constants";
 
 export class Player {
     constructor({ world }) {
         this.world = world;
         this.position = [1, 0];
+        this.previousPosition = [1, 0];
         this.score = 0;
         this.moves = 20;
         this.maxLives = 3;
         this.lives = this.maxLives;
         this.checkpoint = [1, 0];
+        this.movementTimer = 0.0;
         this.mesh = new THREE.Mesh(
             PLAYER_GEOMETRY,
             PLAYER_MATERIAL
@@ -38,6 +40,9 @@ export class Player {
         const newChunkId = this.world.tileAt([x, y]).chunkId;
         if (!this.world.tileAt([x, y]).visited) {
             this.score += this.world.tileAt(this.position).score;
+            if (this.world.tileAt(this.position).score > 1) {
+                this.world.dispatchEvent("apply-background", SVG_BACKGROUND_ROOM);
+            }
             this.world.dispatchEvent("player-score-changed", this.score);
             this.world.tileAt([x, y]).visited = true;
         }
@@ -56,8 +61,10 @@ export class Player {
     }
 
     teleportTo([x, y]) {
+        this.previousPosition = [...this.position];
         this.position = [x, y];
-        this.mesh.position.copy(this.worldPosition());
+        this.movementTimer = 0.0;
+        this.world.dispatchEvent("player-moved-to", this.position);
     }
 
     saveCheckpoint() {
@@ -74,5 +81,13 @@ export class Player {
             });
         }
         this.teleportTo(this.checkpoint);
+    }
+
+    updateMovement(dt) {
+        this.movementTimer += dt;
+        if (this.movementTimer > 1.0) {
+            this.movementTimer = 1.0;
+        }
+        this.mesh.position.lerp(this.worldPosition(), this.movementTimer);
     }
 }

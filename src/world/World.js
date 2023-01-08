@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import { CAMERA_START_POSITION, TUTORIAL_LEVEL_DATA } from '../constants';
-import { Level } from '../level/Level';
 import { Level2 } from '../level/Level2';
 import { createLights } from '../lighting';
 import { Player } from '../player/Player';
@@ -27,8 +26,8 @@ export class World {
 
         this.eventListeners = {};
         this.lastT = 0.0;
-        // this.camera = createOrthoCamera(CAMERA_START_POSITION);
-        this.camera = createPerspectiveCamera(CAMERA_START_POSITION);
+        this.camera = createOrthoCamera(CAMERA_START_POSITION);
+        // this.camera = createPerspectiveCamera(CAMERA_START_POSITION);
         this.lights = createLights();
         this.lights.forEach(light => this.scene.add(light));
 
@@ -70,9 +69,8 @@ export class World {
             CAMERA_START_POSITION.z + this.player.mesh.position.z
         );
         this.camera.lookAt(this.player.mesh.position);
-        // this.level.updateWalkableMarkers();
-        this.level.updateVisionMarkers();
         this.level.updateFallingChunks(dt);
+        this.player.updateMovement(dt);
         RENDERER.render(this.scene, this.camera);
     }
 }

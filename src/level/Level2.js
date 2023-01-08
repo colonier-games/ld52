@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { LEVEL_DATAS, TILETYPE_ID_EXIT_EAST, TILETYPE_ID_EXIT_NORTH, TILETYPE_ID_EXIT_SOUTH, TILETYPE_ID_EXIT_WEST, TILETYPE_ID_SPAWN, TILETYPE_ID_VISION, TILE_HEIGHT, TUTORIAL_LEVEL_DATA, WALKABLE_TILE_MARKER_GEOMETRY, WALKABLE_TILE_MARKER_MATERIAL } from "../constants";
+import { LEVEL_DATAS, TILETYPE_ID_EXIT_EAST, TILETYPE_ID_EXIT_NORTH, TILETYPE_ID_EXIT_SOUTH, TILETYPE_ID_EXIT_WEST, TILETYPE_ID_SPAWN, TILETYPE_ID_TRAP, TILETYPE_ID_VISION, TILE_HEIGHT, TUTORIAL_LEVEL_DATA, WALKABLE_TILE_MARKER_GEOMETRY, WALKABLE_TILE_MARKER_MATERIAL } from "../constants";
 import { Chunk } from "./Chunk";
 
 function matchingExitFor({ tile, nextChunk }) {
@@ -44,6 +44,7 @@ export class Level2 {
         this.generateNewChunk();
 
         this.world.addEventListener("player-chunk-changed", this.onPlayerChunkChanged.bind(this));
+        this.world.addEventListener("player-moved-to", this.onPlayerMoved.bind(this));
 
         console.log(this);
     }
@@ -139,19 +140,6 @@ export class Level2 {
         return tiles.filter(tile => !!tile).filter(tile => tile.walkable);
     }
 
-
-    updateVisionMarkers() {
-        const standingTile = this.tileAt([
-            this.world.player.position[0],
-            this.world.player.position[1]
-        ]);
-        if (standingTile && standingTile.type === TILETYPE_ID_VISION) {
-            this.chunks.forEach(chunk => chunk.visionMarkers.forEach(marker => marker.visible = true));
-        } else {
-            this.chunks.forEach(chunk => chunk.visionMarkers.forEach(marker => marker.visible = false));
-        }
-    }
-
     updateFallingChunks(dt) {
         this.fallingChunks.forEach(chunk => chunk.updateFalling(dt));
         const fallenChunks = this.fallingChunks.filter(chunk => chunk.isFalling && chunk.fallingTimer > 15.0);
@@ -171,6 +159,21 @@ export class Level2 {
 
         console.log(this);
 
+    }
+
+    onPlayerMoved(toPosition) {
+        const newTile = this.tileAt(toPosition);
+        if (newTile.type === TILETYPE_ID_VISION) {
+            this.chunks.forEach(
+                chunk => chunk.tiles.filter(tile => tile.type === TILETYPE_ID_TRAP)
+                    .forEach(tile => tile.topMesh.visible = true)
+            );
+        } else {
+            this.chunks.forEach(
+                chunk => chunk.tiles.filter(tile => tile.type === TILETYPE_ID_TRAP)
+                    .forEach(tile => tile.topMesh.visible = false)
+            );
+        }
     }
 
 }

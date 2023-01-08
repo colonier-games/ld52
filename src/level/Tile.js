@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { TEXTURE_MANDALAS, TILETYPE_ID_AIR, TILETYPE_ID_AWARD, TILETYPE_ID_CHECKPOINT, TILETYPE_ID_EXIT_EAST, TILETYPE_ID_EXIT_NORTH, TILETYPE_ID_EXIT_SOUTH, TILETYPE_ID_EXIT_WEST, TILETYPE_ID_NORMAL, TILETYPE_ID_SPAWN, TILETYPE_ID_TRAP, TILETYPE_ID_VISION, TILETYPE_ID_WALL, TILE_APPEARING_MAX_DELAY, TILE_APPEARING_MAX_OFFSET_VARIANCE, TILE_APPEARING_PROGRESS_MAX_VARIANCE, TILE_APPEARING_PROGRESS_START, TILE_APPEARING_SPEED, TILE_FALLING_ACCELERATION, TILE_GEOMETRY, TILE_MATERIALS, TILE_MATERIAL_UNKNOWN, TILE_SIZE, TILE_SPACING, TILE_STAIRS_OFFSET, TILE_TOP_GEOMETRY, TILE_UNVISITED_FALLING_MAX_TIME, TILE_VISITED_FALLING_MAX_TIME, TILE_WALL_GEOMETRY } from '../constants';
+import { TEXTURE_MANDALAS, TEXTURE_MANDALA_SPAWN, TEXTURE_MANDALA_TRAP, TEXTURE_MANDALA_VISION, TILETYPE_ID_AIR, TILETYPE_ID_AWARD, TILETYPE_ID_CHECKPOINT, TILETYPE_ID_EXIT_EAST, TILETYPE_ID_EXIT_NORTH, TILETYPE_ID_EXIT_SOUTH, TILETYPE_ID_EXIT_WEST, TILETYPE_ID_NORMAL, TILETYPE_ID_SPAWN, TILETYPE_ID_TRAP, TILETYPE_ID_VISION, TILETYPE_ID_WALL, TILE_APPEARING_MAX_DELAY, TILE_APPEARING_MAX_OFFSET_VARIANCE, TILE_APPEARING_PROGRESS_MAX_VARIANCE, TILE_APPEARING_PROGRESS_START, TILE_APPEARING_SPEED, TILE_FALLING_ACCELERATION, TILE_GEOMETRY, TILE_MATERIALS, TILE_MATERIAL_UNKNOWN, TILE_SIZE, TILE_SPACING, TILE_STAIRS_OFFSET, TILE_TOP_GEOMETRY, TILE_UNVISITED_FALLING_MAX_TIME, TILE_VISITED_FALLING_MAX_TIME, TILE_WALL_GEOMETRY } from '../constants';
 import { TileRow } from './TileRow';
 
 function isWalkableType(type) {
@@ -51,6 +51,11 @@ function damageOf(type) {
     return 0;
 }
 
+function isMandalaAlwaysShownFor(type) {
+    return type === TILETYPE_ID_SPAWN
+        || type === TILETYPE_ID_VISION;
+}
+
 export class Tile {
     constructor({ row, col, type, award, chunkId }) {
         /** @type {TileRow} */
@@ -79,16 +84,27 @@ export class Tile {
                 TILE_MATERIALS[this.type] || TILE_MATERIAL_UNKNOWN
             );
             this.mesh.receiveShadow = true;
+            this.mesh.castShadow = true;
 
+            this.topMeshMaterial = new THREE.MeshBasicMaterial({
+                map: TEXTURE_MANDALAS[Math.floor(Math.random() * TEXTURE_MANDALAS.length)],
+                side: THREE.DoubleSide,
+                transparent: true,
+            });
             this.topMesh = new THREE.Mesh(
                 TILE_TOP_GEOMETRY,
-                new THREE.MeshBasicMaterial({
-                    map: TEXTURE_MANDALAS[Math.floor(Math.random() * TEXTURE_MANDALAS.length)],
-                    side: THREE.DoubleSide,
-                    transparent: true,
-                })
+                this.topMeshMaterial
             );
-            this.topMesh.visible = false;
+            if (this.type === TILETYPE_ID_SPAWN) {
+                this.topMeshMaterial.map = TEXTURE_MANDALA_SPAWN;
+            } else if (this.type === TILETYPE_ID_TRAP) {
+                this.topMeshMaterial.map = TEXTURE_MANDALA_TRAP;
+                this.topMeshMaterial.color = new THREE.Color(0xff2222);
+            } else if (this.type === TILETYPE_ID_VISION) {
+                this.topMeshMaterial.map = TEXTURE_MANDALA_VISION;
+            }
+            this.topMesh.visible = isMandalaAlwaysShownFor(this.type);
+
             this.updateMesh();
         } else {
             this.mesh = null;
@@ -118,7 +134,7 @@ export class Tile {
             this.mesh.updateMatrix();
 
             this.topMesh.position.copy(this.mesh.position);
-            this.topMesh.position.y += TILE_SIZE * 0.25;
+            this.topMesh.position.y += TILE_SIZE * 0.125 + 0.0001;
             this.topMesh.setRotationFromAxisAngle(new THREE.Vector3(1, 0, 0), 0.5 * Math.PI);
             this.topMesh.updateMatrix();
         }
@@ -143,11 +159,11 @@ export class Tile {
     }
 
     updateAppearing(dt) {
-        if(!this.isAppearing) {
+        if (!this.isAppearing) {
             return;
         }
 
-        if(this.appearingProgress >= 1.0) {
+        if (this.appearingProgress >= 1.0) {
             this.isAppearing = false;
             return;
         }

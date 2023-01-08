@@ -19,12 +19,18 @@ import _IMAGE_MANDALA_8 from '../assets/mandala/mandalak-08.png';
 import _IMAGE_MANDALA_9 from '../assets/mandala/mandalak-09.png';
 import _IMAGE_MANDALA_10 from '../assets/mandala/mandalak-10.png';
 
+import _IMAGE_MANDALA_SPAWN from '../assets/mandala/spawn.png';
+import _IMAGE_MANDALA_TRAP from '../assets/mandala/trap.png';
+import _IMAGE_MANDALA_VISION from '../assets/mandala/vision.png';
+
+import _SVG_BACKGROUND_ROOM from '../assets/background/room.svg';
+
 const textureLoader = new THREE.TextureLoader();
 
 export const TILE_SIZE = 0.2;
 export const TILE_HEIGHT = 0.05;
 export const TILE_SPACING = TILE_SIZE * 1.1;
-export const TILE_STAIRS_OFFSET = TILE_SIZE * 0.25;
+export const TILE_STAIRS_OFFSET = TILE_SIZE * 0.125;
 export const TILE_TOP_SIZE = 0.75 * TILE_SIZE;
 export const PLAYER_SIZE = 0.1;
 export const PLAYER_POSITION_Y = PLAYER_SIZE;
@@ -52,20 +58,32 @@ export const TILETYPE_ID_EXIT_WEST = 12;
 export const TILETYPE_ID_SPAWN = 63;
 export const TILETYPE_ID_AIR = 64;
 
+export const TILE_MATERIAL_ROUGHNESS = 0.05;
+
+
 export const TILE_MATERIALS = {
-    [TILETYPE_ID_TRAP]: new THREE.MeshStandardMaterial({ color: 0x33ffaa }),
-    [TILETYPE_ID_NORMAL]: new THREE.MeshStandardMaterial({ color: 0x33ffaa }),
-    [TILETYPE_ID_AWARD]: new THREE.MeshStandardMaterial({ color: 0x33aaff }),
-    [TILETYPE_ID_WALL]: new THREE.MeshStandardMaterial({ color: 0x333333 }),
-    [TILETYPE_ID_SPAWN]: new THREE.MeshStandardMaterial({ color: 0x33ffaa }),
-    [TILETYPE_ID_VISION]: new THREE.MeshStandardMaterial({ color: 0xaa33ff }),
-    [TILETYPE_ID_CHECKPOINT]: new THREE.MeshStandardMaterial({ color: 0xffaa33 }),
-    [TILETYPE_ID_EXIT_NORTH]: new THREE.MeshStandardMaterial({ color: 0xff00ff }),
-    [TILETYPE_ID_EXIT_EAST]: new THREE.MeshStandardMaterial({ color: 0xff00ff }),
-    [TILETYPE_ID_EXIT_SOUTH]: new THREE.MeshStandardMaterial({ color: 0xff00ff }),
-    [TILETYPE_ID_EXIT_WEST]: new THREE.MeshStandardMaterial({ color: 0xff00ff }),
+    [TILETYPE_ID_TRAP]: new THREE.MeshStandardMaterial({ color: 0xbfb29c, roughness: TILE_MATERIAL_ROUGHNESS }),
+    [TILETYPE_ID_NORMAL]: new THREE.MeshStandardMaterial({ color: 0xbfb29c, roughness: TILE_MATERIAL_ROUGHNESS }),
+    [TILETYPE_ID_AWARD]: new THREE.MeshStandardMaterial({ color: 0xbfb29c, roughness: TILE_MATERIAL_ROUGHNESS }),
+    [TILETYPE_ID_WALL]: new THREE.MeshStandardMaterial({ color: 0xbfb29c, roughness: TILE_MATERIAL_ROUGHNESS }),
+    [TILETYPE_ID_SPAWN]: new THREE.MeshStandardMaterial({ color: 0xbfb29c, roughness: TILE_MATERIAL_ROUGHNESS }),
+    [TILETYPE_ID_VISION]: new THREE.MeshStandardMaterial({ color: 0xbfb29c, roughness: TILE_MATERIAL_ROUGHNESS }),
+    [TILETYPE_ID_CHECKPOINT]: new THREE.MeshStandardMaterial({ color: 0xbfb29c, roughness: TILE_MATERIAL_ROUGHNESS }),
+    [TILETYPE_ID_EXIT_NORTH]: new THREE.MeshStandardMaterial({ color: 0xbfb29c, roughness: TILE_MATERIAL_ROUGHNESS }),
+    [TILETYPE_ID_EXIT_EAST]: new THREE.MeshStandardMaterial({ color: 0xbfb29c, roughness: TILE_MATERIAL_ROUGHNESS }),
+    [TILETYPE_ID_EXIT_SOUTH]: new THREE.MeshStandardMaterial({ color: 0xbfb29c, roughness: TILE_MATERIAL_ROUGHNESS }),
+    [TILETYPE_ID_EXIT_WEST]: new THREE.MeshStandardMaterial({ color: 0xbfb29c, roughness: TILE_MATERIAL_ROUGHNESS }),
 }
-export const TILE_MATERIAL_UNKNOWN = new THREE.MeshStandardMaterial({ color: 0xff00ff });
+export const TILE_MATERIAL_UNKNOWN = new THREE.MeshStandardMaterial({ color: 0xbfb29c });
+
+export const LIGHT_COLOR_SUN = 0xffedd0;
+export const LIGHT_COLOR_FILL = 0x807768;
+export const LIGHT_COLOR_AMBIENT = 0xffffff;
+export const LIGHT_INTENSITY_SUN = 4.0;
+export const LIGHT_INTENSITY_FILL = 4.0;
+export const LIGHT_INTENSITY_AMBIENT = 0.25;
+export const LIGHT_SUN_DIRECTION = new THREE.Vector3(10, -6, 0).negate().normalize();
+export const LIGHT_FILL_DIRECTION = new THREE.Vector3(0, -6, 10).negate().normalize();
 
 export const TUTORIAL_LEVEL_DATA = _TUTORIAL_LEVEL_DATA;
 
@@ -90,6 +108,8 @@ export const IMAGE_MANDALAS = [
     _IMAGE_MANDALA_10,
 ];
 
+export const SVG_BACKGROUND_ROOM = _SVG_BACKGROUND_ROOM;
+
 export const TEXTURE_MANDALA_1 = textureLoader.load(_IMAGE_MANDALA_1);
 export const TEXTURE_MANDALA_2 = textureLoader.load(_IMAGE_MANDALA_2);
 export const TEXTURE_MANDALA_3 = textureLoader.load(_IMAGE_MANDALA_3);
@@ -100,6 +120,9 @@ export const TEXTURE_MANDALA_7 = textureLoader.load(_IMAGE_MANDALA_7);
 export const TEXTURE_MANDALA_8 = textureLoader.load(_IMAGE_MANDALA_8);
 export const TEXTURE_MANDALA_9 = textureLoader.load(_IMAGE_MANDALA_9);
 export const TEXTURE_MANDALA_10 = textureLoader.load(_IMAGE_MANDALA_10);
+export const TEXTURE_MANDALA_SPAWN = textureLoader.load(_IMAGE_MANDALA_SPAWN);
+export const TEXTURE_MANDALA_TRAP = textureLoader.load(_IMAGE_MANDALA_TRAP);
+export const TEXTURE_MANDALA_VISION = textureLoader.load(_IMAGE_MANDALA_VISION);
 
 export const TEXTURE_MANDALAS = [
     TEXTURE_MANDALA_1,
@@ -111,7 +134,7 @@ export const TEXTURE_MANDALAS = [
     TEXTURE_MANDALA_7,
     TEXTURE_MANDALA_8,
     TEXTURE_MANDALA_9,
-    TEXTURE_MANDALA_10,
+    TEXTURE_MANDALA_10
 ];
 
 export const TILE_FALLING_ACCELERATION = 15.0;

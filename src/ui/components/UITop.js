@@ -16,12 +16,12 @@ export function UITop({ world }) {
     const full = world.player.lives;
     for (let i = 0; i < missing; i++) {
         heartChildren.push(
-            <img src={IMAGE_ICON_HEART_BROKEN} key={`hm-${i}`} style={{ width: "40px", height: "80px" }} />
+            <img src={IMAGE_ICON_HEART_BROKEN} key={`hm-${i}`} style={{ width: "40px", height: "40px" }} />
         );
     }
     for (let i = 0; i < full; i++) {
         heartChildren.push(
-            <img src={IMAGE_ICON_HEART_FULL} key={`hf-${i}`} style={{ width: "40px", height: "80px" }} />
+            <img src={IMAGE_ICON_HEART_FULL} key={`hf-${i}`} style={{ width: "40px", height: "40px" }} />
         );
     }
 
