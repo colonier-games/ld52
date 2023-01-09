@@ -93,6 +93,7 @@ export class World {
                 tile.flowerPoints = 1;
                 tile.updateMesh();
                 this.scene.add(mesh);
+                this.dispatchEvent("player-grew", null);
             }
         });
         this.popSeeds = this.popSeeds.filter(popSeed => popSeed.alive);

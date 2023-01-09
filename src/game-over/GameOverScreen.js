@@ -7,6 +7,7 @@ export class GameOverScreen {
         this.onReturnToMenu = onReturnToMenu;
 
         this.domElement = document.createElement("div");
+        this.domElement.className = "game-over-screen-root";
     }
 
     mount() {

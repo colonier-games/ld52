@@ -31,7 +31,7 @@ function gameOver({ ui, world }) {
         world,
         onReturnToMenu: () => {
             gameOverScreen.unmount();
-            newGame();
+            mainMenu();
         }
     });
 
@@ -46,6 +46,7 @@ function newGame() {
     const ui = new UserInterface({ world });
     const bg = new AnimatedBackground({ el: document.getElementById("animated-background") });
     const gameAudio = new GameAudio({ world });
+    gameAudio.playMainMusic();
 
     RENDERER.setSize(window.innerWidth, window.innerHeight);
     RENDERER.setAnimationLoop(world.update.bind(world));

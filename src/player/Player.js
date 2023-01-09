@@ -114,6 +114,7 @@ export class Player {
 
         this.moves += total;
         this.changeItemTo(null);
+        this.world.dispatchEvent("player-cut", null);
     }
 
     waterFlowers() {
@@ -136,6 +137,7 @@ export class Player {
         }
 
         this.changeItemTo(null);
+        this.world.dispatchEvent("player-watered", null);
     }
 
     changeItemTo(item) {

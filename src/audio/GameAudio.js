@@ -4,11 +4,8 @@ export class GameAudio {
     constructor({ world }) {
         this.world = world;
 
-        this.musicMainIntro = document.getElementById("audio-music-main-intro");
-        this.musicMainLoop = document.getElementById("audio-music-main-loop");
-        this.musicMainModestLoop = document.getElementById("audio-music-main-modest-loop");
-        this.musicLoops = [this.musicMainLoop, this.musicMainModestLoop];
-        this.musicMainOutro = document.getElementById("audio-music-main-outro");
+        this.musicMenu = document.getElementById("audio-music-menu");
+        this.musicMain = document.getElementById("audio-music-main");
         this.sfxReveal = document.getElementById("audio-sfx-reveal");
         this.sfxFlower = document.getElementById("audio-sfx-flower");
         this.sfxStep0 = document.getElementById("audio-sfx-step0");
@@ -18,27 +15,33 @@ export class GameAudio {
         this.sfxStep4 = document.getElementById("audio-sfx-step4");
         this.sfxSteps = [this.sfxStep0, this.sfxStep1, this.sfxStep2, this.sfxStep3, this.sfxStep4];
         this.sfxTrap = document.getElementById("audio-sfx-trap");
+        this.sfxCut = document.getElementById("audio-sfx-cut");
+        this.sfxGrowing = document.getElementById("audio-sfx-growing");
+        this.sfxWatering0 = document.getElementById("audio-sfx-watering0");
+        this.sfxWatering1 = document.getElementById("audio-sfx-watering1");
+        this.sfxWateringSounds = [this.sfxWatering0, this.sfxWatering1];
 
-        this.world.addEventListener("player-moved-to", this.playSfxStep.bind(this));
-        this.world.addEventListener("player-died", this.onPlayerDied.bind(this));
+        if (world) {
+            this.world.addEventListener("player-moved-to", this.playSfxStep.bind(this));
+            this.world.addEventListener("player-died", this.onPlayerDied.bind(this));
+            this.world.addEventListener("player-cut", this.playSfxCut.bind(this));
+            this.world.addEventListener("player-watered", this.playSfxWatering.bind(this));
+            this.world.addEventListener("player-grew", this.playSfxGrowing.bind(this));
+        }
+    }
 
-        this.musicMainIntro.addEventListener("ended", this.onMusicMainIntroEnded.bind(this));
-        this.musicMainLoop.addEventListener("ended", this.onLoopEnded.bind(this));
-        this.musicMainModestLoop.addEventListener("ended", this.onLoopEnded.bind(this));
+    playMainMusic() {
+        this.musicMenu.pause();
+        this.musicMenu.currentTime = 0;
+        this.musicMain.currentTime = 0;
+        this.musicMain.play();
+    }
 
-        window.addEventListener("DOMContentLoaded", () => {
-            this.musicMainIntro.volume = 1;
-            this.musicLoops.forEach(sfx => sfx.volume = 1);
-
-            this.musicMainIntro.currentTime = 0;
-            setTimeout(
-                () => {
-                    this.musicMainIntro.play();
-                },
-                5000
-            );
-        });
-
+    playMenuMusic() {
+        this.musicMain.pause();
+        this.musicMain.currentTime = 0;
+        this.musicMenu.currentTime = 0;
+        this.musicMenu.play();
     }
 
     playSfxReveal() {
@@ -71,38 +74,28 @@ export class GameAudio {
         }
     }
 
-    playNextMusicLoop() {
-        let nextLoop = this.musicLoops[Math.floor(Math.random() * this.musicLoops.length)];
-        nextLoop.play();
+    playSfxCut() {
+        const clone = this.sfxCut.cloneNode();
+        clone.play();
     }
 
-    onMusicMainIntroEnded() {
-        this.playNextMusicLoop();
+    playSfxGrowing() {
+        const clone = this.sfxGrowing.cloneNode();
+        clone.play();
+    }
+
+    playSfxWatering() {
+        const wateringSound = this.sfxWateringSounds[Math.floor(Math.random() * this.sfxWateringSounds.length)];
+        const clone = wateringSound.cloneNode();
+        clone.play();
     }
 
     onPlayerDied() {
 
-        let fadeOutInterval = setInterval(() => {
-            if (this.musicMainIntro.volume > 0) {
-                this.musicMainIntro.volume = Math.max(0, this.musicMainIntro.volume - 0.1);
-                this.musicLoops.forEach(sfx => sfx.volume = Math.max(0, sfx.volume - 0.1));
-            } else {
-                clearInterval(fadeOutInterval);
-                this.musicMainIntro.pause();
-                this.musicMainIntro.currentTime = 0;
-                this.musicMainIntro.volume = 1;
-                this.musicLoops.forEach(sfx => {
-                    sfx.pause();
-                    sfx.currentTime = 0;
-                    sfx.volume = 1;
-                });
-                this.musicMainOutro.play();
-            }
-        }, 100);
+        this.musicMain.pause();
+        this.musicMenu.currentTime = 0;
+        this.musicMenu.play();
 
     }
 
-    onLoopEnded() {
-        this.playNextMusicLoop();
-    }
 }

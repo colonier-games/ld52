@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { GameAudio } from "../../audio/GameAudio";
 import { AnimatedBackground } from "../../bg/AnimatedBackground";
 import { IMAGE_ICON_BTN_CREDITS, IMAGE_ICON_BTN_START, IMAGE_ICON_BTN_TUTORIAL, SVG_BACKGROUNDS, SVG_LOGO } from "../../constants";
 import { Credits } from "./Credits";
@@ -26,6 +27,8 @@ export function MainMenuApp({
                 svgUrl: achievementLevel === 0 ? SVG_LOGO : SVG_BACKGROUNDS[achievementLevel],
                 speed: 500
             });
+
+            new GameAudio({}).playMenuMusic();
 
         },
         []
