@@ -38,7 +38,7 @@ const TUTORIAL_PAGES = [
     },
     {
         title: "Traps",
-        text: "We have to pay close attention to where we step, because we don't manage to plant and grow flowers everywhere. Very ugly plants are sprouting somewhere. These plants badly injure Rose, who is very enthusiastic, but after the third one, her patience finally runs out.",
+        text: "We have to pay close attention to where we step, because we don't manage to plant and grow flowers everywhere. Very ugly plants are sprouting somewhere. These plants badly injure Rose, who is very enthusiastic, but after the third one, her patience finally runs out. These ugly plants however reveal themselves, if Rose steps on one of the nicely decorated tiles.",
         gifSrc: GIF_TUTORIAL_TRAPS,
         mandalaSrc: IMAGE_MANDALA_TRAP
     },
