@@ -26,6 +26,7 @@ export class GameAudio {
         this.sfxDeath = document.getElementById("audio-sfx-death");
         this.sfxFalling = document.getElementById("audio-sfx-falling");
         this.sfxLevelStart = document.getElementById("audio-sfx-level-start");
+        this.sfxMandalaCompleted = document.getElementById("audio-sfx-mandala");
 
         if (world) {
             this.world.addEventListener("player-moved-to", this.playSfxStep.bind(this));
@@ -34,6 +35,7 @@ export class GameAudio {
             this.world.addEventListener("player-watered", this.playSfxWatering.bind(this));
             this.world.addEventListener("player-grew", this.playSfxGrowing.bind(this));
             this.world.addEventListener("player-chunk-changed", this.playSfxFalling.bind(this));
+            this.world.addEventListener("mandala-completed", this.playSfxMandalaCompleted.bind(this));
         }
     }
 
@@ -109,6 +111,11 @@ export class GameAudio {
 
     playSfxLevelStart() {
         const clone = this.sfxLevelStart.cloneNode();
+        clone.play();
+    }
+
+    playSfxMandalaCompleted() {
+        const clone = this.sfxMandalaCompleted.cloneNode();
         clone.play();
     }
 
