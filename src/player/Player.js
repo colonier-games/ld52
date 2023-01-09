@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { PLAYER_GEOMETRY, PLAYER_ITEM_GEOMETRY, PLAYER_ITEM_OFFSET_Y, PLAYER_MATERIAL, PLAYER_POSITION_Y, PLAYER_SIZE, SEED_SIZE, SVG_BACKGROUND_ROOM, TEXTURE_ICON_SCISSORS, TEXTURE_ICON_SEED, TEXTURE_ICON_WATERING_CAN, TILETYPE_ID_NORMAL, TILETYPE_ID_SCISSORS, TILETYPE_ID_WATERING_CAN, TILE_SPACING, TILE_STAIRS_OFFSET } from "../constants";
+import { GLTF_FLOWERS, PLAYER_GEOMETRY, PLAYER_ITEM_GEOMETRY, PLAYER_ITEM_OFFSET_Y, PLAYER_MATERIAL, PLAYER_POSITION_Y, PLAYER_SIZE, SEED_SIZE, SVG_BACKGROUND_ROOM, TEXTURE_ICON_SCISSORS, TEXTURE_ICON_SEED, TEXTURE_ICON_WATERING_CAN, TILETYPE_ID_NORMAL, TILETYPE_ID_SCISSORS, TILETYPE_ID_WATERING_CAN, TILE_SPACING, TILE_STAIRS_OFFSET } from "../constants";
 
 export class Player {
     constructor({ world }) {
@@ -36,7 +36,6 @@ export class Player {
         );
         this.itemMesh.visible = false;
         this.itemTimer = 0.0;
-        this.changeItemTo("scissors");
     }
 
     worldPosition() {
@@ -86,10 +85,65 @@ export class Player {
             this.world.dispatchEvent("player-chunk-changed", newChunkId);
             this.saveCheckpoint();
         }
+
+        if (this.world.tileAt([x, y]).flowerPoints > 0) {
+            if (this.currentItem === "scissors") {
+                this.cutFlowers();
+            } else if (this.currentItem === "watering_can") {
+                this.waterFlowers();
+            }
+        }
+    }
+
+    cutFlowers() {
+        const dx = this.position[0] - this.previousPosition[0];
+        const dy = this.position[1] - this.previousPosition[1];
+
+        if (dx === 0 && dy === 0) {
+            return;
+        }
+
+        const tilesInLine = this.world.level.floweredTilesInLine(this.previousPosition, [dx, dy]);
+        let total = 0;
+        for (const tile of tilesInLine) {
+            total += tile.flowerPoints;
+            tile.flowerPoints = 0;
+            this.world.scene.remove(tile.flower);
+            tile.flower = null;
+        }
+
+        this.moves += total;
+        this.changeItemTo(null);
+    }
+
+    waterFlowers() {
+        const dx = this.position[0] - this.previousPosition[0];
+        const dy = this.position[1] - this.previousPosition[1];
+
+        if (dx === 0 && dy === 0) {
+            return;
+        }
+
+        const tilesInLine = this.world.level.floweredTilesInLine(this.previousPosition, [dx, dy]);
+
+        for (const tile of tilesInLine) {
+            tile.flowerPoints = 2;
+            this.world.scene.remove(tile.flower);
+            const randomFlower = GLTF_FLOWERS[Math.floor(Math.random() * GLTF_FLOWERS.length)];
+            tile.flower = randomFlower.scene.clone();
+            tile.updateMesh();
+            this.world.scene.add(tile.flower);
+        }
+
+        this.changeItemTo(null);
     }
 
     changeItemTo(item) {
         this.currentItem = item;
+        if (item === null) {
+            this.itemMesh.visible = false;
+            return;
+        }
         this.itemMesh.visible = true;
         switch (item) {
             case "scissors":

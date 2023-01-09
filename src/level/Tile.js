@@ -75,11 +75,12 @@ export class Tile {
 
         if (this.type === TILETYPE_ID_AWARD) {
             const mandalaTypes = Object.keys(TEXTURE_MANDALAS);
-            // this.mandalaType = mandalaTypes[Math.floor(Math.random() * mandalaTypes.length)];
-            this.mandalaType = 'A';
+            this.mandalaType = mandalaTypes[Math.floor(Math.random() * mandalaTypes.length)];
+            // this.mandalaType = 'A';
         }
 
         this.flower = null;
+        this.flowerPoints = 0;
 
         if (!isAirType(type)) {
             this.mesh = new THREE.Mesh(

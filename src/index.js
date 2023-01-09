@@ -4,9 +4,22 @@ import { AnimatedBackground } from './bg/AnimatedBackground';
 import { loadGltfModels } from './constants';
 import { MouseInput } from './input/MouseInput';
 import { RENDERER } from './renderer';
-import { GameOverScreen } from './ui/GameOverScreen';
+import { GameOverScreen } from './game-over/GameOverScreen';
+import { MainMenu } from './main-menu/MainMenu';
 import { UserInterface } from './ui/UserInterface';
 import { World } from './world/World';
+
+function onMandalaCompleted() {
+    let achievementLevel = 0;
+    if (localStorage.getItem("achievement-level")) {
+        achievementLevel = parseInt(localStorage.getItem("achievement-level"));
+    }
+    achievementLevel++;
+    if (achievementLevel > 5) {
+        achievementLevel = 5;
+    }
+    localStorage.setItem("achievement-level", achievementLevel);
+}
 
 function gameOver({ ui, world }) {
 
@@ -31,7 +44,7 @@ function newGame() {
     const world = new World();
     const mouseInput = new MouseInput({ renderer: RENDERER, world });
     const ui = new UserInterface({ world });
-    const bg = new AnimatedBackground({ world });
+    const bg = new AnimatedBackground({ el: document.getElementById("animated-background") });
     const gameAudio = new GameAudio({ world });
 
     RENDERER.setSize(window.innerWidth, window.innerHeight);
@@ -43,8 +56,25 @@ function newGame() {
     world.addEventListener("player-died", ({ score, moves }) => {
         gameOver({ ui, world });
     });
+    world.addEventListener("mandala-completed", () => {
+        onMandalaCompleted();
+    });
+}
+
+function mainMenu() {
+
+    // const bg = new AnimatedBackground({ el: document.getElementById("animated-background") });
+    const menu = new MainMenu({
+        // bg,
+        onStartGame: () => {
+            menu.unmount();
+            newGame();
+        }
+    });
+    menu.mount();
+
 }
 
 loadGltfModels().then(() => {
-    newGame();
+    mainMenu();
 });

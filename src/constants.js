@@ -12,6 +12,13 @@ import _IMAGE_ICON_SEED from '../assets/icons/seed.png';
 import _IMAGE_ICON_SCISSORS from '../assets/icons/scissors.png';
 import _IMAGE_ICON_WATERING_CAN from '../assets/icons/watering_can.png';
 
+import _IMAGE_ICON_BTN_START from '../assets/icons/btn_start.png';
+import _IMAGE_ICON_BTN_TUTORIAL from '../assets/icons/btn_tutorial.png';
+import _IMAGE_ICON_BTN_CREDITS from '../assets/icons/btn_credits.png';
+import _IMAGE_ICON_BTN_BACK from '../assets/icons/btn_back.png';
+import _IMAGE_ICON_BTN_ARROWLEFT from '../assets/icons/btn_arrowleft.png';
+import _IMAGE_ICON_BTN_ARROWRIGHT from '../assets/icons/btn_arrowright.png';
+
 import _IMAGE_MANDALA_TILE from '../assets/mandala/tile.png';
 
 import _IMAGE_MANDALA_SPAWN from '../assets/mandala/spawn.png';
@@ -63,7 +70,16 @@ import _IMAGE_MANDALA_G_3 from '../assets/mandala/G/g-3.png';
 import _IMAGE_MANDALA_G_4 from '../assets/mandala/G/g-4.png';
 import _IMAGE_MANDALA_G_5 from '../assets/mandala/G/g-5.png';
 
-import _SVG_BACKGROUND_ROOM from '../assets/background/room.svg';
+import _SVG_BACKGROUND_1 from '../assets/background/1.svg';
+import _SVG_BACKGROUND_2 from '../assets/background/2.svg';
+import _SVG_BACKGROUND_3 from '../assets/background/3.svg';
+import _SVG_BACKGROUND_4 from '../assets/background/4.svg';
+import _SVG_BACKGROUND_5 from '../assets/background/5.svg';
+import _SVG_LOGO from '../assets/background/logo.svg';
+
+
+import _GIF_TUTORIAL_MOVEMENT from '../assets/tutorial/movement.gif';
+
 
 const textureLoader = new THREE.TextureLoader();
 const gltfLoader = new GLTFLoader();
@@ -149,9 +165,18 @@ export const LEVEL_DATAS = [
     _LEVEL_TEST2_DATA
 ];
 
+export const IMAGE_MANDALA_SPAWN = _IMAGE_MANDALA_SPAWN;
+
 export const IMAGE_ICON_HEART_BROKEN = _IMAGE_ICON_HEART_BROKEN;
 export const IMAGE_ICON_HEART_FULL = _IMAGE_ICON_HEART_FULL;
 export const IMAGE_ICON_SEED = _IMAGE_ICON_SEED;
+
+export const IMAGE_ICON_BTN_START = _IMAGE_ICON_BTN_START;
+export const IMAGE_ICON_BTN_TUTORIAL = _IMAGE_ICON_BTN_TUTORIAL;
+export const IMAGE_ICON_BTN_CREDITS = _IMAGE_ICON_BTN_CREDITS;
+export const IMAGE_ICON_BTN_BACK = _IMAGE_ICON_BTN_BACK;
+export const IMAGE_ICON_BTN_ARROWRIGHT = _IMAGE_ICON_BTN_ARROWRIGHT;
+export const IMAGE_ICON_BTN_ARROWLEFT = _IMAGE_ICON_BTN_ARROWLEFT;
 
 export const IMAGE_MANDALAS = {
     A: [_IMAGE_MANDALA_A_1, _IMAGE_MANDALA_A_2, _IMAGE_MANDALA_A_3, _IMAGE_MANDALA_A_4, _IMAGE_MANDALA_A_5],
@@ -163,7 +188,17 @@ export const IMAGE_MANDALAS = {
     G: [_IMAGE_MANDALA_G_1, _IMAGE_MANDALA_G_2, _IMAGE_MANDALA_G_3, _IMAGE_MANDALA_G_4, _IMAGE_MANDALA_G_5],
 }
 
-export const SVG_BACKGROUND_ROOM = _SVG_BACKGROUND_ROOM;
+export const SVG_BACKGROUND_1 = _SVG_BACKGROUND_1;
+export const SVG_BACKGROUND_2 = _SVG_BACKGROUND_2;
+export const SVG_BACKGROUND_3 = _SVG_BACKGROUND_3;
+export const SVG_BACKGROUND_4 = _SVG_BACKGROUND_4;
+export const SVG_BACKGROUND_5 = _SVG_BACKGROUND_5;
+export const SVG_BACKGROUNDS = [SVG_BACKGROUND_1, SVG_BACKGROUND_2, SVG_BACKGROUND_3, SVG_BACKGROUND_4, SVG_BACKGROUND_5];
+export const SVG_LOGO = _SVG_LOGO;
+
+
+export const GIF_TUTORIAL_MOVEMENT = _GIF_TUTORIAL_MOVEMENT;
+
 
 export const TEXTURE_ICON_SEED = textureLoader.load(_IMAGE_ICON_SEED);
 export const TEXTURE_ICON_SCISSORS = textureLoader.load(_IMAGE_ICON_SCISSORS);
@@ -243,7 +278,10 @@ export var GLTF_FLOWER_BLUE_3 = null;
 export var GLTF_FLOWER_RED_1 = null;
 export var GLTF_FLOWER_RED_2 = null;
 export var GLTF_FLOWER_RED_3 = null;
+export var GLTF_GRASS_1 = null;
+export var GLTF_GRASS_2 = null;
 export var GLTF_FLOWERS = [];
+export var GLTF_GRASSES = [];
 
 export async function loadGltfModels() {
 
@@ -275,6 +313,13 @@ export async function loadGltfModels() {
         new URL("../assets/models/flower_red3.gltf", import.meta.url) + "",
     );
 
+    GLTF_GRASS_1 = await gltfLoader.loadAsync(
+        new URL("../assets/models/grass.gltf", import.meta.url) + "",
+    );
+    GLTF_GRASS_2 = await gltfLoader.loadAsync(
+        new URL("../assets/models/grass_dense.gltf", import.meta.url) + "",
+    );
+
     GLTF_FLOWERS = [
         GLTF_FLOWER_BEIGE_1,
         GLTF_FLOWER_BEIGE_2,
@@ -285,6 +330,11 @@ export async function loadGltfModels() {
         GLTF_FLOWER_RED_1,
         GLTF_FLOWER_RED_2,
         GLTF_FLOWER_RED_3,
+    ];
+
+    GLTF_GRASSES = [
+        GLTF_GRASS_1,
+        GLTF_GRASS_2,
     ];
 
 }

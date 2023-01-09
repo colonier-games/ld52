@@ -1,0 +1,28 @@
+.game-background {
+    background: rgb(84, 90, 123);
+    background: linear-gradient(180deg, rgba(84, 90, 123, 1) 0%, rgba(115, 119, 150, 1) 16%, rgba(143, 119, 137, 1) 33%, rgba(176, 128, 140, 1) 50%, rgba(197, 134, 143, 1) 66%, rgba(234, 167, 170, 1) 83%, rgba(243, 205, 205, 1) 100%);
+    z-index: 0;
+}
+
+.game-animated-background {
+    z-index: 1;
+    stroke-dasharray: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    object {
+        width: 600px;
+        max-width: 100%;
+    }
+
+}
+
+.logo-background object {
+    margin-top: 40px;
+    padding: 20px;
+}
+
+.background-invisible {
+    opacity: 0;
+}

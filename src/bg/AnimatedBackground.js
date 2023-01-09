@@ -1,14 +1,11 @@
 
 export class AnimatedBackground {
-    constructor({ world }) {
-        this.world = world;
-
-        this.container = document.getElementById("animated-background");
+    constructor({ el }) {
+        this.container = el;
         this.container.classList.add("background-invisible");
-        this.world.addEventListener("apply-background", this.applyBackground.bind(this));
     }
 
-    applyBackground(svgUrl) {
+    applyBackground({ svgUrl, objectClass, speed, glow }) {
         this.container.classList.add("background-invisible");
         for (let i = 0; i < this.container.children.length; i++) {
             const element = this.container.children[i];
@@ -17,6 +14,11 @@ export class AnimatedBackground {
         this.objectElement = document.createElement("object");
         this.objectElement.setAttribute("type", "image/svg+xml");
         this.objectElement.setAttribute("data", svgUrl);
+        if (objectClass) {
+            this.objectElement.classList.add(objectClass);
+        } else {
+            this.objectElement.classList.add("full");
+        }
         this.objectElement.onload = () => {
             const doc = this.objectElement.contentDocument;
             const svg = doc.querySelector("svg");
@@ -25,7 +27,7 @@ export class AnimatedBackground {
             const allRects = svg.querySelectorAll("rect");
 
             let styleContent = ``
-            let animationSpeed = 4000;
+            let animationSpeed = typeof speed === "number" ? speed : 1000;
 
             const allSvgElements = [...allPaths, ...allPolygons, ...allRects];
 
@@ -69,8 +71,11 @@ export class AnimatedBackground {
 
             this.container.classList.remove("background-invisible");
 
+            console.log(svg);
+
         };
 
         this.container.appendChild(this.objectElement);
+
     }
 }

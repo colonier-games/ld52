@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { LEVEL_DATAS, TILETYPE_ID_AWARD, TILETYPE_ID_EXIT_EAST, TILETYPE_ID_EXIT_NORTH, TILETYPE_ID_EXIT_SOUTH, TILETYPE_ID_EXIT_WEST, TILETYPE_ID_NORMAL, TILETYPE_ID_SPAWN, TILETYPE_ID_TRAP, TILETYPE_ID_VISION, TILE_HEIGHT, TILE_MATERIALS, TUTORIAL_LEVEL_DATA, WALKABLE_TILE_MARKER_GEOMETRY, WALKABLE_TILE_MARKER_MATERIAL } from "../constants";
+import { LEVEL_DATAS, TILETYPE_ID_AIR, TILETYPE_ID_AWARD, TILETYPE_ID_EXIT_EAST, TILETYPE_ID_EXIT_NORTH, TILETYPE_ID_EXIT_SOUTH, TILETYPE_ID_EXIT_WEST, TILETYPE_ID_NORMAL, TILETYPE_ID_SPAWN, TILETYPE_ID_TRAP, TILETYPE_ID_VISION, TILETYPE_ID_WALL, TILE_HEIGHT, TILE_MATERIALS, TUTORIAL_LEVEL_DATA, WALKABLE_TILE_MARKER_GEOMETRY, WALKABLE_TILE_MARKER_MATERIAL } from "../constants";
 import { Chunk } from "./Chunk";
 
 function matchingExitFor({ tile, nextChunk }) {
@@ -190,6 +190,27 @@ export class Level2 {
                     }
                 )
         );
+    }
+
+    floweredTilesInLine(point, dir) {
+        let x = point[0];
+        let y = point[1];
+        const tiles = [];
+
+        while (true) {
+            x += dir[0];
+            y += dir[1];
+            const tile = this.tileAt([x, y]);
+            if (!tile
+                || tile.type === TILETYPE_ID_WALL
+                || tile.type === TILETYPE_ID_AIR
+                || tile.flowerPoints < 1) {
+                break;
+            }
+            tiles.push(tile);
+        }
+
+        return tiles;
     }
 
 }

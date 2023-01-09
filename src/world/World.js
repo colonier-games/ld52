@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { CAMERA_START_POSITION, GLTF_FLOWERS, GLTF_FLOWER_BEIGE_1, TEXTURE_MANDALAS, TILETYPE_ID_NORMAL, TUTORIAL_LEVEL_DATA } from '../constants';
+import { CAMERA_START_POSITION, GLTF_FLOWERS, GLTF_FLOWER_BEIGE_1, GLTF_GRASSES, TEXTURE_MANDALAS, TILETYPE_ID_NORMAL, TUTORIAL_LEVEL_DATA } from '../constants';
 import { Level2 } from '../level/Level2';
 import { createLights } from '../lighting';
 import { Player } from '../player/Player';
@@ -86,9 +86,11 @@ export class World {
             popSeed.removeFromScene(this.scene);
             const tile = this.tileAt(popSeed.position);
             if (tile) {
-                const randomFlower = GLTF_FLOWERS[Math.floor(Math.random() * GLTF_FLOWERS.length)]
+                const randomFlower = GLTF_GRASSES[Math.floor(Math.random() * GLTF_GRASSES.length)];
                 const mesh = randomFlower.scene.clone();
+                mesh.castShadow = true;
                 tile.flower = mesh;
+                tile.flowerPoints = 1;
                 tile.updateMesh();
                 this.scene.add(mesh);
             }

@@ -1,0 +1,119 @@
+{
+    "asset" : {
+        "generator" : "Khronos glTF Blender I/O v3.3.27",
+        "version" : "2.0"
+    },
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                0
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "grass"
+        }
+    ],
+    "materials" : [
+        {
+            "name" : "natureKit-leavesGreen",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.3529411852359772,
+                    0.7686274647712708,
+                    0.7137255072593689,
+                    1
+                ],
+                "metallicFactor" : 0.25
+            }
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "grass",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 0,
+                        "NORMAL" : 1,
+                        "TEXCOORD_0" : 2
+                    },
+                    "indices" : 3,
+                    "material" : 0
+                }
+            ]
+        }
+    ],
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5126,
+            "count" : 328,
+            "max" : [
+                0.1905369758605957,
+                0.2540000081062317,
+                0.19609135389328003
+            ],
+            "min" : [
+                -0.1905369758605957,
+                0,
+                -0.19609135389328003
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 328,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5126,
+            "count" : 328,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 3,
+            "componentType" : 5123,
+            "count" : 396,
+            "type" : "SCALAR"
+        }
+    ],
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 3936,
+            "byteOffset" : 0,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 3936,
+            "byteOffset" : 3936,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 2624,
+            "byteOffset" : 7872,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 792,
+            "byteOffset" : 10496,
+            "target" : 34963
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 11288,
+            "uri" : "grass.bin"
+        }
+    ]
+}

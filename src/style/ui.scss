@@ -1,0 +1,89 @@
+.game-ui-root,
+.game-background,
+.game-animated-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.game-ui-root {
+    z-index: 200;
+}
+
+.game-ui-top-root {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    color: white;
+    padding: 20px;
+}
+
+.game-ui-bottom-root {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 32px;
+    color: white;
+}
+
+.game-ui-left-root {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 384px;
+    height: 100%;
+    color: white;
+    padding: 20px;
+}
+
+.game-ui-right-root {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 128px;
+    height: 100%;
+    color: white;
+}
+
+.game-ui-top-root,
+.game-ui-bottom-root,
+.game-ui-left-root,
+.game-ui-right-root {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.mandala-progress {
+    width: 60px;
+    height: 60px;
+
+    img {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.mandala-progress-empty {
+    width: 60px;
+    height: 60px;
+}
+
+.mandala-container {
+    display: flex;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 8px;
+}
