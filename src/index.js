@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { GameAudio } from './audio/GameAudio';
 import { AnimatedBackground } from './bg/AnimatedBackground';
 import { MouseInput } from './input/MouseInput';
 import { RENDERER } from './renderer';
@@ -30,6 +31,7 @@ function newGame() {
     const mouseInput = new MouseInput({ renderer: RENDERER, world });
     const ui = new UserInterface({ world });
     const bg = new AnimatedBackground({ world });
+    const gameAudio = new GameAudio({ world });
 
     RENDERER.setSize(window.innerWidth, window.innerHeight);
     RENDERER.setAnimationLoop(world.update.bind(world));

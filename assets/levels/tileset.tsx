@@ -16,6 +16,11 @@
  <tile id="9" class="exitEast"/>
  <tile id="10" class="exitSouth"/>
  <tile id="11" class="exitWest"/>
+ <tile id="12" class="itemAxe"/>
+ <tile id="13" class="tree"/>
+ <tile id="14" class="itemWater"/>
+ <tile id="15" class="seed"/>
+ <tile id="16" class="itemScissors"/>
  <tile id="62" class="spawn"/>
  <tile id="63" class="air"/>
 </tileset>
