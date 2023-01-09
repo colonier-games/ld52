@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GameAudio } from './audio/GameAudio';
 import { AnimatedBackground } from './bg/AnimatedBackground';
+import { loadGltfModels } from './constants';
 import { MouseInput } from './input/MouseInput';
 import { RENDERER } from './renderer';
 import { GameOverScreen } from './ui/GameOverScreen';
@@ -44,4 +45,6 @@ function newGame() {
     });
 }
 
-newGame();
+loadGltfModels().then(() => {
+    newGame();
+});

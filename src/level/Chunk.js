@@ -99,6 +99,10 @@ export class Chunk {
             .forEach(tile => {
                 scene.remove(tile.topMesh);
             });
+        this.tiles.filter(tile => !!tile.flower)
+            .forEach(tile => {
+                scene.remove(tile.flower);
+            });
 
         this.visionMarkers.forEach(marker => {
             scene.remove(marker);

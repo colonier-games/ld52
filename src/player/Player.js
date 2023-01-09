@@ -1,13 +1,21 @@
 import * as THREE from 'three';
-import { PLAYER_GEOMETRY, PLAYER_MATERIAL, PLAYER_POSITION_Y, PLAYER_SIZE, SVG_BACKGROUND_ROOM, TILE_SPACING, TILE_STAIRS_OFFSET } from "../constants";
+import { PLAYER_GEOMETRY, PLAYER_ITEM_GEOMETRY, PLAYER_ITEM_OFFSET_Y, PLAYER_MATERIAL, PLAYER_POSITION_Y, PLAYER_SIZE, SEED_SIZE, SVG_BACKGROUND_ROOM, TEXTURE_ICON_SCISSORS, TEXTURE_ICON_SEED, TEXTURE_ICON_WATERING_CAN, TILETYPE_ID_NORMAL, TILETYPE_ID_SCISSORS, TILETYPE_ID_WATERING_CAN, TILE_SPACING, TILE_STAIRS_OFFSET } from "../constants";
 
 export class Player {
     constructor({ world }) {
         this.world = world;
         this.position = [1, 0];
         this.previousPosition = [1, 0];
-        this.score = 0;
-        this.moves = 20;
+        this.mandalaProgress = {
+            A: 0,
+            B: 0,
+            C: 0,
+            D: 0,
+            E: 0,
+            F: 0,
+            G: 0,
+        };
+        this.moves = 50;
         this.maxLives = 3;
         this.lives = this.maxLives;
         this.checkpoint = [1, 0];
@@ -18,6 +26,17 @@ export class Player {
         );
         this.mesh.castShadow = true;
         this.mesh.position.copy(this.worldPosition());
+        this.seedSprites = [];
+        this.addSeeds(this.moves);
+        this.seedTimer = 0.0;
+        this.currentItem = null;
+        this.itemMesh = new THREE.Mesh(
+            PLAYER_ITEM_GEOMETRY,
+            new THREE.MeshBasicMaterial({ map: TEXTURE_ICON_SCISSORS, transparent: true, side: THREE.DoubleSide })
+        );
+        this.itemMesh.visible = false;
+        this.itemTimer = 0.0;
+        this.changeItemTo("scissors");
     }
 
     worldPosition() {
@@ -30,24 +49,32 @@ export class Player {
 
     addToScene(scene) {
         scene.add(this.mesh);
+        scene.add(this.itemMesh);
     }
 
     moveTo([x, y]) {
+        if (this.moves <= 0) {
+            return;
+        }
         const currentChunkId = this.world.tileAt(this.position).chunkId;
-        this.world.tileAt(this.position).showMandala();
-        this.moves--;
+        // this.world.tileAt(this.position).showMandala();
         this.teleportTo([x, y]);
         const newChunkId = this.world.tileAt([x, y]).chunkId;
         if (!this.world.tileAt([x, y]).visited) {
-            this.score += this.world.tileAt(this.position).score;
-            if (this.world.tileAt(this.position).score > 1) {
-                this.world.dispatchEvent("apply-background", SVG_BACKGROUND_ROOM);
+            this.moves--;
+            if (this.moves < 0) {
+                this.moves = 0;
             }
-            this.world.dispatchEvent("player-score-changed", this.score);
+            if (this.world.tileAt(this.position).mandalaType) {
+                this.world.takeAward(this.position);
+            }
             this.world.tileAt([x, y]).visited = true;
         }
         if (this.world.tileAt([x, y]).isCheckpoint) {
             this.saveCheckpoint();
+        }
+        if (!this.world.tileAt(this.previousPosition).flower) {
+            this.world.addPopSeed(this.previousPosition);
         }
         this.world.dispatchEvent("player-moves-changed", this.moves);
         const dmg = this.world.tileAt([x, y]).damage;
@@ -57,7 +84,25 @@ export class Player {
 
         if (currentChunkId !== newChunkId) {
             this.world.dispatchEvent("player-chunk-changed", newChunkId);
+            this.saveCheckpoint();
         }
+    }
+
+    changeItemTo(item) {
+        this.currentItem = item;
+        this.itemMesh.visible = true;
+        switch (item) {
+            case "scissors":
+                this.itemMesh.material.map = TEXTURE_ICON_SCISSORS;
+                break;
+            case "watering_can":
+                this.itemMesh.material.map = TEXTURE_ICON_WATERING_CAN;
+                break;
+        }
+        this.world.addAwardItem({
+            position: [...this.position],
+            texture: this.itemMesh.material.map,
+        });
     }
 
     teleportTo([x, y]) {
@@ -65,6 +110,17 @@ export class Player {
         this.position = [x, y];
         this.movementTimer = 0.0;
         this.world.dispatchEvent("player-moved-to", this.position);
+
+        const newTile = this.world.tileAt(this.position);
+        if (newTile.type === TILETYPE_ID_SCISSORS) {
+            this.changeItemTo("scissors");
+            newTile.changeTo(TILETYPE_ID_NORMAL);
+            newTile.hideMandala();
+        } else if (newTile.type === TILETYPE_ID_WATERING_CAN) {
+            this.changeItemTo("watering_can");
+            newTile.changeTo(TILETYPE_ID_NORMAL);
+            newTile.hideMandala();
+        }
     }
 
     saveCheckpoint() {
@@ -83,11 +139,59 @@ export class Player {
         this.teleportTo(this.checkpoint);
     }
 
-    updateMovement(dt) {
+    update(dt) {
+
         this.movementTimer += dt;
         if (this.movementTimer > 1.0) {
             this.movementTimer = 1.0;
         }
         this.mesh.position.lerp(this.worldPosition(), this.movementTimer);
+
+        this.itemTimer += dt;
+        this.itemMesh.position.copy(this.mesh.position);
+        this.itemMesh.position.y += PLAYER_ITEM_OFFSET_Y;
+        this.itemMesh.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), this.itemTimer * 2.0);
+
+        this.seedTimer += dt;
+
+        while (this.seedSprites.length < this.moves) {
+            this.addSeeds(1);
+        }
+        while (this.seedSprites.length > this.moves) {
+            this.removeSeeds(1);
+        }
+
+        const dAlpha = 2.0 * Math.PI / this.seedSprites.length;
+        this.seedSprites.forEach((sprite, i) => {
+            sprite.position.copy(this.mesh.position);
+            sprite.position.x += Math.sin(this.seedTimer * 2.0 + i * dAlpha) * PLAYER_SIZE * 2.0;
+            sprite.position.y += PLAYER_SIZE * 0.5 + Math.sin(this.seedTimer * 2.0 + 2.0 * i) * SEED_SIZE;
+            sprite.position.z += Math.cos(this.seedTimer * 2.0 + i * dAlpha) * PLAYER_SIZE * 2.0;
+            sprite.updateMatrix();
+        });
+
+    }
+
+    addSeeds(count) {
+        for (let i = 0; i < count; i++) {
+            const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
+                map: TEXTURE_ICON_SEED,
+                transparent: true,
+                depthTest: true,
+            }));
+            sprite.position.copy(this.mesh.position);
+            sprite.position.y += PLAYER_SIZE * 0.5;
+            sprite.scale.setScalar(SEED_SIZE);
+            this.seedSprites.push(sprite);
+            this.world.scene.add(sprite);
+        }
+    }
+
+    removeSeeds(count) {
+        for (let i = 0; i < count; i++) {
+            if (this.seedSprites.length === 0) return;
+            const sprite = this.seedSprites.pop();
+            this.world.scene.remove(sprite);
+        }
     }
 }

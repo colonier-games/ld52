@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { LEVEL_DATAS, TILETYPE_ID_EXIT_EAST, TILETYPE_ID_EXIT_NORTH, TILETYPE_ID_EXIT_SOUTH, TILETYPE_ID_EXIT_WEST, TILETYPE_ID_SPAWN, TILETYPE_ID_TRAP, TILETYPE_ID_VISION, TILE_HEIGHT, TUTORIAL_LEVEL_DATA, WALKABLE_TILE_MARKER_GEOMETRY, WALKABLE_TILE_MARKER_MATERIAL } from "../constants";
+import { LEVEL_DATAS, TILETYPE_ID_AWARD, TILETYPE_ID_EXIT_EAST, TILETYPE_ID_EXIT_NORTH, TILETYPE_ID_EXIT_SOUTH, TILETYPE_ID_EXIT_WEST, TILETYPE_ID_NORMAL, TILETYPE_ID_SPAWN, TILETYPE_ID_TRAP, TILETYPE_ID_VISION, TILE_HEIGHT, TILE_MATERIALS, TUTORIAL_LEVEL_DATA, WALKABLE_TILE_MARKER_GEOMETRY, WALKABLE_TILE_MARKER_MATERIAL } from "../constants";
 import { Chunk } from "./Chunk";
 
 function matchingExitFor({ tile, nextChunk }) {
@@ -174,6 +174,22 @@ export class Level2 {
                     .forEach(tile => tile.topMesh.visible = false)
             );
         }
+    }
+
+    fixAwardTiles() {
+        this.chunks.forEach(
+            chunk => chunk.tiles.filter(tile => tile.type === TILETYPE_ID_AWARD)
+                .forEach(
+                    tile => {
+                        const progress = this.world.player.mandalaProgress[tile.mandalaType];
+                        if (progress >= 5) {
+                            tile.type = TILETYPE_ID_NORMAL;
+                            tile.topMesh.visible = false;
+                            tile.mesh.material = TILE_MATERIALS[TILETYPE_ID_NORMAL];
+                        }
+                    }
+                )
+        );
     }
 
 }

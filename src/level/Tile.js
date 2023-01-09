@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { TEXTURE_MANDALAS, TEXTURE_MANDALA_SPAWN, TEXTURE_MANDALA_TRAP, TEXTURE_MANDALA_VISION, TILETYPE_ID_AIR, TILETYPE_ID_AWARD, TILETYPE_ID_CHECKPOINT, TILETYPE_ID_EXIT_EAST, TILETYPE_ID_EXIT_NORTH, TILETYPE_ID_EXIT_SOUTH, TILETYPE_ID_EXIT_WEST, TILETYPE_ID_NORMAL, TILETYPE_ID_SPAWN, TILETYPE_ID_TRAP, TILETYPE_ID_VISION, TILETYPE_ID_WALL, TILE_APPEARING_MAX_DELAY, TILE_APPEARING_MAX_OFFSET_VARIANCE, TILE_APPEARING_PROGRESS_MAX_VARIANCE, TILE_APPEARING_PROGRESS_START, TILE_APPEARING_SPEED, TILE_FALLING_ACCELERATION, TILE_GEOMETRY, TILE_MATERIALS, TILE_MATERIAL_UNKNOWN, TILE_SIZE, TILE_SPACING, TILE_STAIRS_OFFSET, TILE_TOP_GEOMETRY, TILE_UNVISITED_FALLING_MAX_TIME, TILE_VISITED_FALLING_MAX_TIME, TILE_WALL_GEOMETRY } from '../constants';
+import { TEXTURE_MANDALAS, TEXTURE_MANDALA_SCISSORS, TEXTURE_MANDALA_SPAWN, TEXTURE_MANDALA_TILE, TEXTURE_MANDALA_TRAP, TEXTURE_MANDALA_VISION, TEXTURE_MANDALA_WATERING_CAN, TILETYPE_ID_AIR, TILETYPE_ID_AWARD, TILETYPE_ID_AXE, TILETYPE_ID_CHECKPOINT, TILETYPE_ID_EXIT_EAST, TILETYPE_ID_EXIT_NORTH, TILETYPE_ID_EXIT_SOUTH, TILETYPE_ID_EXIT_WEST, TILETYPE_ID_NORMAL, TILETYPE_ID_SCISSORS, TILETYPE_ID_SEEDS, TILETYPE_ID_SPAWN, TILETYPE_ID_TRAP, TILETYPE_ID_TREE, TILETYPE_ID_VISION, TILETYPE_ID_WALL, TILETYPE_ID_WATERING_CAN, TILE_APPEARING_MAX_DELAY, TILE_APPEARING_MAX_OFFSET_VARIANCE, TILE_APPEARING_PROGRESS_MAX_VARIANCE, TILE_APPEARING_PROGRESS_START, TILE_APPEARING_SPEED, TILE_FALLING_ACCELERATION, TILE_GEOMETRY, TILE_MATERIALS, TILE_MATERIAL_UNKNOWN, TILE_SIZE, TILE_SPACING, TILE_STAIRS_OFFSET, TILE_TOP_GEOMETRY, TILE_UNVISITED_FALLING_MAX_TIME, TILE_VISITED_FALLING_MAX_TIME, TILE_WALL_GEOMETRY } from '../constants';
 import { TileRow } from './TileRow';
 
 function isWalkableType(type) {
@@ -12,7 +12,12 @@ function isWalkableType(type) {
         || type === TILETYPE_ID_EXIT_NORTH
         || type === TILETYPE_ID_EXIT_SOUTH
         || type === TILETYPE_ID_EXIT_EAST
-        || type === TILETYPE_ID_EXIT_WEST;
+        || type === TILETYPE_ID_EXIT_WEST
+        || type === TILETYPE_ID_AXE
+        || type === TILETYPE_ID_TREE
+        || type === TILETYPE_ID_WATERING_CAN
+        || type === TILETYPE_ID_SEEDS
+        || type === TILETYPE_ID_SCISSORS;
 }
 
 function isAirType(type) {
@@ -30,19 +35,6 @@ function isExitType(type) {
         || type === TILETYPE_ID_EXIT_WEST;
 }
 
-function scoreOf(type) {
-    if (type === TILETYPE_ID_NORMAL
-        || type === TILETYPE_ID_SPAWN
-        || type === TILETYPE_ID_VISION
-        || type === TILETYPE_ID_CHECKPOINT) {
-        return 1;
-    } else if (type === TILETYPE_ID_AWARD) {
-        return 5;
-    }
-
-    return 0;
-}
-
 function damageOf(type) {
     if (type === TILETYPE_ID_TRAP) {
         return 1;
@@ -53,7 +45,10 @@ function damageOf(type) {
 
 function isMandalaAlwaysShownFor(type) {
     return type === TILETYPE_ID_SPAWN
-        || type === TILETYPE_ID_VISION;
+        || type === TILETYPE_ID_VISION
+        || type === TILETYPE_ID_AWARD
+        || type === TILETYPE_ID_SCISSORS
+        || type === TILETYPE_ID_WATERING_CAN;
 }
 
 export class Tile {
@@ -65,7 +60,6 @@ export class Tile {
         this.award = award;
         this.chunkId = chunkId;
         this.walkable = isWalkableType(type);
-        this.score = scoreOf(type);
         this.damage = damageOf(type);
         this.providesVision = type === TILETYPE_ID_VISION;
         this.isCheckpoint = type === TILETYPE_ID_CHECKPOINT;
@@ -78,6 +72,15 @@ export class Tile {
         this.appearingProgress = 0.0;
         this.appearingRandomOffset = Math.random() * TILE_APPEARING_MAX_OFFSET_VARIANCE;
         this.isAppearing = true;
+
+        if (this.type === TILETYPE_ID_AWARD) {
+            const mandalaTypes = Object.keys(TEXTURE_MANDALAS);
+            // this.mandalaType = mandalaTypes[Math.floor(Math.random() * mandalaTypes.length)];
+            this.mandalaType = 'A';
+        }
+
+        this.flower = null;
+
         if (!isAirType(type)) {
             this.mesh = new THREE.Mesh(
                 isWallType(type) ? TILE_WALL_GEOMETRY : TILE_GEOMETRY,
@@ -102,6 +105,12 @@ export class Tile {
                 this.topMeshMaterial.color = new THREE.Color(0xff2222);
             } else if (this.type === TILETYPE_ID_VISION) {
                 this.topMeshMaterial.map = TEXTURE_MANDALA_VISION;
+            } else if (this.type === TILETYPE_ID_AWARD) {
+                this.topMeshMaterial.map = TEXTURE_MANDALAS[this.mandalaType][0];
+            } else if (this.type === TILETYPE_ID_SCISSORS) {
+                this.topMeshMaterial.map = TEXTURE_MANDALA_SCISSORS;
+            } else if (this.type === TILETYPE_ID_WATERING_CAN) {
+                this.topMeshMaterial.map = TEXTURE_MANDALA_WATERING_CAN;
             }
             this.topMesh.visible = isMandalaAlwaysShownFor(this.type);
 
@@ -109,6 +118,7 @@ export class Tile {
         } else {
             this.mesh = null;
         }
+
     }
 
     move([x, y]) {
@@ -116,6 +126,21 @@ export class Tile {
         this.col = x;
 
         if (this.mesh) {
+            this.updateMesh();
+        }
+    }
+
+    changeTo(newType) {
+        this.type = newType;
+        this.walkable = isWalkableType(newType);
+        this.damage = damageOf(newType);
+        this.providesVision = newType === TILETYPE_ID_VISION;
+        this.isCheckpoint = newType === TILETYPE_ID_CHECKPOINT;
+        this.isExit = isExitType(newType);
+
+        if (this.mesh) {
+            this.mesh.material = TILE_MATERIALS[newType] || TILE_MATERIAL_UNKNOWN;
+            this.mesh.visible = true;
             this.updateMesh();
         }
     }
@@ -137,12 +162,26 @@ export class Tile {
             this.topMesh.position.y += TILE_SIZE * 0.125 + 0.0001;
             this.topMesh.setRotationFromAxisAngle(new THREE.Vector3(1, 0, 0), 0.5 * Math.PI);
             this.topMesh.updateMatrix();
+
+            if (this.flower) {
+                this.flower.position.copy(this.mesh.position);
+                // prop.position.y += TILE_SIZE * 8;
+                this.flower.scale.setScalar(0.5);
+                this.flower.visible = true;
+                this.flower.updateMatrix();
+            }
         }
     }
 
     showMandala() {
         if (this.topMesh) {
             this.topMesh.visible = true;
+        }
+    }
+
+    hideMandala() {
+        if (this.topMesh) {
+            this.topMesh.visible = false;
         }
     }
 
