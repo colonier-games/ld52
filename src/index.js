@@ -47,6 +47,7 @@ function newGame() {
     const bg = new AnimatedBackground({ el: document.getElementById("animated-background") });
     const gameAudio = new GameAudio({ world });
     gameAudio.playMainMusic();
+    gameAudio.playSfxLevelStart();
 
     RENDERER.setSize(window.innerWidth, window.innerHeight);
     RENDERER.setAnimationLoop(world.update.bind(world));

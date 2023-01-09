@@ -226,6 +226,13 @@ export class Player {
             sprite.updateMatrix();
         });
 
+        if (this.moves === 0) {
+            this.world.dispatchEvent("player-died", {
+                score: this.score,
+                moves: this.moves
+            })
+        }
+
     }
 
     addSeeds(count) {

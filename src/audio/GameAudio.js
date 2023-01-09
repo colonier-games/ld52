@@ -20,6 +20,9 @@ export class GameAudio {
         this.sfxWatering0 = document.getElementById("audio-sfx-watering0");
         this.sfxWatering1 = document.getElementById("audio-sfx-watering1");
         this.sfxWateringSounds = [this.sfxWatering0, this.sfxWatering1];
+        this.sfxDeath = document.getElementById("audio-sfx-death");
+        this.sfxFalling = document.getElementById("audio-sfx-falling");
+        this.sfxLevelStart = document.getElementById("audio-sfx-level-start");
 
         if (world) {
             this.world.addEventListener("player-moved-to", this.playSfxStep.bind(this));
@@ -27,6 +30,8 @@ export class GameAudio {
             this.world.addEventListener("player-cut", this.playSfxCut.bind(this));
             this.world.addEventListener("player-watered", this.playSfxWatering.bind(this));
             this.world.addEventListener("player-grew", this.playSfxGrowing.bind(this));
+            this.world.addEventListener("player-lives-changed", this.playSfxDeath.bind(this));
+            this.world.addEventListener("player-chunk-changed", this.playSfxFalling.bind(this));
         }
     }
 
@@ -87,6 +92,21 @@ export class GameAudio {
     playSfxWatering() {
         const wateringSound = this.sfxWateringSounds[Math.floor(Math.random() * this.sfxWateringSounds.length)];
         const clone = wateringSound.cloneNode();
+        clone.play();
+    }
+
+    playSfxDeath() {
+        const clone = this.sfxDeath.cloneNode();
+        clone.play();
+    }
+
+    playSfxFalling() {
+        const clone = this.sfxFalling.cloneNode();
+        clone.play();
+    }
+
+    playSfxLevelStart() {
+        const clone = this.sfxLevelStart.cloneNode();
         clone.play();
     }
 
