@@ -1,4 +1,5 @@
 @echo off
 
-npm install
-npm run serve
+call npm install
+call npm run serve
+pause
