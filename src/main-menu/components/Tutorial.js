@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { GIF_TUTORIAL_MOVEMENT, IMAGE_MANDALA_SPAWN, IMAGE_ICON_BTN_ARROWLEFT, IMAGE_ICON_BTN_ARROWRIGHT, IMAGE_ICON_BTN_BACK, GIF_TUTORIAL_TRAPS, IMAGE_MANDALA_TRAP, GIF_TUTORIAL_WATERING, IMAGE_MANDALA_WATERING_CAN, GIF_TUTORIAL_SCISSORS, IMAGE_MANDALA_SCISSORS } from "../../constants";
+import { GIF_TUTORIAL_MOVEMENT, IMAGE_MANDALA_SPAWN, IMAGE_ICON_BTN_ARROWLEFT, IMAGE_ICON_BTN_ARROWRIGHT, IMAGE_ICON_BTN_BACK, GIF_TUTORIAL_TRAPS, IMAGE_MANDALA_TRAP, GIF_TUTORIAL_WATERING, IMAGE_MANDALA_WATERING_CAN, GIF_TUTORIAL_SCISSORS, IMAGE_MANDALA_SCISSORS, IMAGE_MANDALA_VISION } from "../../constants";
 
 function TutorialPage({
     title,
@@ -29,6 +29,12 @@ const TUTORIAL_PAGES = [
         text: "In our game, you must control Rose to collect flower pieces. On a computer, you can use the left mouse button to move through the tracks, while on a mobile phone, you can only use your finger. The character can be moved in 4 directions.",
         gifSrc: GIF_TUTORIAL_MOVEMENT,
         mandalaSrc: IMAGE_MANDALA_SPAWN
+    },
+    {
+        title: "Goal of the game",
+        text: "On the tracks, we have to collect as many seeds as possible with Rose before we run out of steps. It is worth paying attention to the mandalas on the left, as the work is really worth it when you have collected all five components from each flower When she gets tired, so she has no more steps, Rose gets tired and stops. Poor thing, you didn't pay enough attention to how much she likes to collect mandala flowers and seeds.",
+        gifSrc: GIF_TUTORIAL_MOVEMENT,
+        mandalaSrc: IMAGE_MANDALA_VISION
     },
     {
         title: "Traps",

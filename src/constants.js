@@ -91,6 +91,8 @@ import _GIF_TUTORIAL_MOVEMENT from '../assets/tutorial/movement.gif';
 import _GIF_TUTORIAL_TRAPS from '../assets/tutorial/traps.gif';
 import _GIF_TUTORIAL_WATERING_CAN from '../assets/tutorial/watering.gif';
 import _GIF_TUTORIAL_SCISSORS from '../assets/tutorial/scissors.gif';
+import _GIF_TUTORIAL_GOAL from '../assets/tutorial/goal.gif';
+
 
 const textureLoader = new THREE.TextureLoader();
 const gltfLoader = new GLTFLoader();
@@ -188,6 +190,7 @@ export const IMAGE_MANDALA_SPAWN = _IMAGE_MANDALA_SPAWN;
 export const IMAGE_MANDALA_TRAP = _IMAGE_MANDALA_TRAP;
 export const IMAGE_MANDALA_WATERING_CAN = _IMAGE_MANDALA_WATERING_CAN;
 export const IMAGE_MANDALA_SCISSORS = _IMAGE_MANDALA_SCISSORS;
+export const IMAGE_MANDALA_VISION = _IMAGE_MANDALA_VISION;
 
 export const IMAGE_ICON_HEART_BROKEN = _IMAGE_ICON_HEART_BROKEN;
 export const IMAGE_ICON_HEART_FULL = _IMAGE_ICON_HEART_FULL;
@@ -225,6 +228,7 @@ export const GIF_TUTORIAL_MOVEMENT = _GIF_TUTORIAL_MOVEMENT;
 export const GIF_TUTORIAL_TRAPS = _GIF_TUTORIAL_TRAPS;
 export const GIF_TUTORIAL_WATERING = _GIF_TUTORIAL_WATERING_CAN;
 export const GIF_TUTORIAL_SCISSORS = _GIF_TUTORIAL_SCISSORS;
+export const GIF_TUTORIAL_GOAL = _GIF_TUTORIAL_GOAL;
 
 
 export const TEXTURE_ICON_SEED = textureLoader.load(_IMAGE_ICON_SEED);
