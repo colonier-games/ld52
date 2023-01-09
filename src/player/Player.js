@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { GLTF_FLOWERS, PLAYER_GEOMETRY, PLAYER_ITEM_GEOMETRY, PLAYER_ITEM_OFFSET_Y, PLAYER_MATERIAL, PLAYER_POSITION_Y, PLAYER_SIZE, SEED_SIZE, SVG_BACKGROUND_ROOM, TEXTURE_ICON_SCISSORS, TEXTURE_ICON_SEED, TEXTURE_ICON_WATERING_CAN, TILETYPE_ID_NORMAL, TILETYPE_ID_SCISSORS, TILETYPE_ID_WATERING_CAN, TILE_SPACING, TILE_STAIRS_OFFSET } from "../constants";
+import { GLTF_FLOWERS, PLAYER_GEOMETRY, PLAYER_ITEM_GEOMETRY, PLAYER_ITEM_OFFSET_Y, PLAYER_MATERIAL, PLAYER_POSITION_Y, PLAYER_SIZE, PLAYER_SPRITE_SCALE, SEED_SIZE, SVG_BACKGROUND_ROOM, TEXTURE_ICON_CHARACTER, TEXTURE_ICON_SCISSORS, TEXTURE_ICON_SEED, TEXTURE_ICON_WATERING_CAN, TILETYPE_ID_NORMAL, TILETYPE_ID_SCISSORS, TILETYPE_ID_WATERING_CAN, TILE_SPACING, TILE_STAIRS_OFFSET } from "../constants";
 
 export class Player {
     constructor({ world }) {
@@ -20,10 +20,18 @@ export class Player {
         this.lives = this.maxLives;
         this.checkpoint = [1, 0];
         this.movementTimer = 0.0;
-        this.mesh = new THREE.Mesh(
+        /* this.mesh = new THREE.Mesh(
             PLAYER_GEOMETRY,
             PLAYER_MATERIAL
+        ); */
+        this.mesh = new THREE.Sprite(
+            new THREE.SpriteMaterial({
+                map: TEXTURE_ICON_CHARACTER,
+                transparent: true,
+                depthTest: true
+            })
         );
+        this.mesh.scale.setScalar(PLAYER_SIZE * PLAYER_SPRITE_SCALE);
         this.mesh.castShadow = true;
         this.mesh.position.copy(this.worldPosition());
         this.seedSprites = [];

@@ -4,6 +4,25 @@
     z-index: 0;
 }
 
+.stars-background {
+    z-index: 1;
+    background: url(../../assets/background/stars.png);
+    background-position: 0 0;
+    background-repeat: repeat;
+    background-size: 100%;
+    animation: infinite-stars 800s linear infinite;
+    animation-fill-mode: both;
+}
+
+@keyframes infinite-stars {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: 10000 20000;
+    }
+}
+
 .game-animated-background {
     z-index: 1;
     stroke-dasharray: 100%;

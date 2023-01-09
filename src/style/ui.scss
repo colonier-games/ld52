@@ -1,6 +1,7 @@
 .game-ui-root,
 .game-background,
-.game-animated-background {
+.game-animated-background,
+.stars-background {
     position: absolute;
     top: 0;
     left: 0;
@@ -29,8 +30,23 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 32px;
+    height: 128px;
     color: white;
+
+    .game-ui-bottom-content {
+
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+
+        .back-button {
+            width: 200px;
+            pointer-events: all;
+        }
+
+    }
 }
 
 .game-ui-left-root {

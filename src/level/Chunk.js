@@ -44,8 +44,7 @@ export class Chunk {
     createVisionMarkers() {
         if (this.visionMarkers && this.visionMarkers.length > 0) {
             this.visionMarkers.forEach(marker => {
-                this.scene.remove(marker);
-                marker.dispose();
+                this.world.scene.remove(marker);
             });
             return;
         }

@@ -5,6 +5,13 @@ import _TUTORIAL_LEVEL_DATA from '../assets/levels/tutorial.json';
 
 import _LEVEL_TEST1_DATA from '../assets/levels/test1.json';
 import _LEVEL_TEST2_DATA from '../assets/levels/test2.json';
+import _LEVEL_TEST3_DATA from '../assets/levels/test3.json';
+import _LEVEL_TEST4_DATA from '../assets/levels/test4.json';
+import _LEVEL_TEST5_DATA from '../assets/levels/test5.json';
+import _LEVEL_TEST6_DATA from '../assets/levels/test6.json';
+import _LEVEL_TEST7_DATA from '../assets/levels/test7.json';
+import _LEVEL_TEST8_DATA from '../assets/levels/test8.json';
+import _LEVEL_TEST9_DATA from '../assets/levels/test9.json';
 
 import _IMAGE_ICON_HEART_BROKEN from '../assets/icons/heart_broken.png';
 import _IMAGE_ICON_HEART_FULL from '../assets/icons/heart_full.png';
@@ -18,6 +25,8 @@ import _IMAGE_ICON_BTN_CREDITS from '../assets/icons/btn_credits.png';
 import _IMAGE_ICON_BTN_BACK from '../assets/icons/btn_back.png';
 import _IMAGE_ICON_BTN_ARROWLEFT from '../assets/icons/btn_arrowleft.png';
 import _IMAGE_ICON_BTN_ARROWRIGHT from '../assets/icons/btn_arrowright.png';
+
+import _IMAGE_ICON_CHARACTER from '../assets/icons/character.png';
 
 import _IMAGE_MANDALA_TILE from '../assets/mandala/tile.png';
 
@@ -79,7 +88,9 @@ import _SVG_LOGO from '../assets/background/logo.svg';
 
 
 import _GIF_TUTORIAL_MOVEMENT from '../assets/tutorial/movement.gif';
-
+import _GIF_TUTORIAL_TRAPS from '../assets/tutorial/traps.gif';
+import _GIF_TUTORIAL_WATERING_CAN from '../assets/tutorial/watering.gif';
+import _GIF_TUTORIAL_SCISSORS from '../assets/tutorial/scissors.gif';
 
 const textureLoader = new THREE.TextureLoader();
 const gltfLoader = new GLTFLoader();
@@ -90,6 +101,7 @@ export const TILE_SPACING = TILE_SIZE * 1.1;
 export const TILE_STAIRS_OFFSET = TILE_SIZE * 0.125;
 export const TILE_TOP_SIZE = 0.75 * TILE_SIZE;
 export const PLAYER_SIZE = 0.025;
+export const PLAYER_SPRITE_SCALE = 4.0;
 export const PLAYER_ITEM_SIZE = 0.1;
 export const SEED_SIZE = 0.03;
 export const PLAYER_POSITION_Y = PLAYER_SIZE * 4;
@@ -162,10 +174,20 @@ export const TUTORIAL_LEVEL_DATA = _TUTORIAL_LEVEL_DATA;
 
 export const LEVEL_DATAS = [
     _LEVEL_TEST1_DATA,
-    _LEVEL_TEST2_DATA
+    _LEVEL_TEST2_DATA,
+    _LEVEL_TEST3_DATA,
+    _LEVEL_TEST4_DATA,
+    _LEVEL_TEST5_DATA,
+    _LEVEL_TEST6_DATA,
+    _LEVEL_TEST7_DATA,
+    _LEVEL_TEST8_DATA,
+    _LEVEL_TEST9_DATA,
 ];
 
 export const IMAGE_MANDALA_SPAWN = _IMAGE_MANDALA_SPAWN;
+export const IMAGE_MANDALA_TRAP = _IMAGE_MANDALA_TRAP;
+export const IMAGE_MANDALA_WATERING_CAN = _IMAGE_MANDALA_WATERING_CAN;
+export const IMAGE_MANDALA_SCISSORS = _IMAGE_MANDALA_SCISSORS;
 
 export const IMAGE_ICON_HEART_BROKEN = _IMAGE_ICON_HEART_BROKEN;
 export const IMAGE_ICON_HEART_FULL = _IMAGE_ICON_HEART_FULL;
@@ -177,6 +199,8 @@ export const IMAGE_ICON_BTN_CREDITS = _IMAGE_ICON_BTN_CREDITS;
 export const IMAGE_ICON_BTN_BACK = _IMAGE_ICON_BTN_BACK;
 export const IMAGE_ICON_BTN_ARROWRIGHT = _IMAGE_ICON_BTN_ARROWRIGHT;
 export const IMAGE_ICON_BTN_ARROWLEFT = _IMAGE_ICON_BTN_ARROWLEFT;
+
+export const IMAGE_ICON_CHARACTER = _IMAGE_ICON_CHARACTER;
 
 export const IMAGE_MANDALAS = {
     A: [_IMAGE_MANDALA_A_1, _IMAGE_MANDALA_A_2, _IMAGE_MANDALA_A_3, _IMAGE_MANDALA_A_4, _IMAGE_MANDALA_A_5],
@@ -198,11 +222,15 @@ export const SVG_LOGO = _SVG_LOGO;
 
 
 export const GIF_TUTORIAL_MOVEMENT = _GIF_TUTORIAL_MOVEMENT;
+export const GIF_TUTORIAL_TRAPS = _GIF_TUTORIAL_TRAPS;
+export const GIF_TUTORIAL_WATERING = _GIF_TUTORIAL_WATERING_CAN;
+export const GIF_TUTORIAL_SCISSORS = _GIF_TUTORIAL_SCISSORS;
 
 
 export const TEXTURE_ICON_SEED = textureLoader.load(_IMAGE_ICON_SEED);
 export const TEXTURE_ICON_SCISSORS = textureLoader.load(_IMAGE_ICON_SCISSORS);
 export const TEXTURE_ICON_WATERING_CAN = textureLoader.load(_IMAGE_ICON_WATERING_CAN);
+export const TEXTURE_ICON_CHARACTER = textureLoader.load(_IMAGE_ICON_CHARACTER);
 
 export const TEXTURE_MANDALA_TILE = textureLoader.load(_IMAGE_MANDALA_TILE);
 export const TEXTURE_MANDALA_SPAWN = textureLoader.load(_IMAGE_MANDALA_SPAWN);

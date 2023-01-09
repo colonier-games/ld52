@@ -6,6 +6,8 @@ export class GameAudio {
 
         this.musicMenu = document.getElementById("audio-music-menu");
         this.musicMain = document.getElementById("audio-music-main");
+        this.musicMain.volume = 0.6;
+        this.musicMenu.volume = 0.6;
         this.sfxReveal = document.getElementById("audio-sfx-reveal");
         this.sfxFlower = document.getElementById("audio-sfx-flower");
         this.sfxStep0 = document.getElementById("audio-sfx-step0");
@@ -17,6 +19,7 @@ export class GameAudio {
         this.sfxTrap = document.getElementById("audio-sfx-trap");
         this.sfxCut = document.getElementById("audio-sfx-cut");
         this.sfxGrowing = document.getElementById("audio-sfx-growing");
+        this.sfxGrowing.volume = 0.8;
         this.sfxWatering0 = document.getElementById("audio-sfx-watering0");
         this.sfxWatering1 = document.getElementById("audio-sfx-watering1");
         this.sfxWateringSounds = [this.sfxWatering0, this.sfxWatering1];
@@ -30,7 +33,6 @@ export class GameAudio {
             this.world.addEventListener("player-cut", this.playSfxCut.bind(this));
             this.world.addEventListener("player-watered", this.playSfxWatering.bind(this));
             this.world.addEventListener("player-grew", this.playSfxGrowing.bind(this));
-            this.world.addEventListener("player-lives-changed", this.playSfxDeath.bind(this));
             this.world.addEventListener("player-chunk-changed", this.playSfxFalling.bind(this));
         }
     }

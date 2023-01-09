@@ -58,6 +58,14 @@ function newGame() {
     world.addEventListener("player-died", ({ score, moves }) => {
         gameOver({ ui, world });
     });
+    world.addEventListener("return-to-menu", () => {
+
+        RENDERER.setAnimationLoop(null);
+        RENDERER.domElement.remove();
+        ui.unmount();
+        mainMenu();
+
+    })
     world.addEventListener("mandala-completed", () => {
         onMandalaCompleted();
     });
