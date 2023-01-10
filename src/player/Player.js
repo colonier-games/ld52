@@ -59,8 +59,19 @@ export class Player {
         if (this.moves <= 0) {
             return;
         }
+
+        if (this.world.tileAt([x, y]).flowerPoints > 0) {
+            if (this.currentItem === "scissors") {
+                this.cutFlowers([x, y]);
+                return;
+            } else if (this.currentItem === "watering_can") {
+                this.waterFlowers([x, y]);
+                return;
+            }
+        }
+
         const currentChunkId = this.world.tileAt(this.position).chunkId;
-        // this.world.tileAt(this.position).showMandala();
+
         this.teleportTo([x, y]);
         const newChunkId = this.world.tileAt([x, y]).chunkId;
         if (!this.world.tileAt([x, y]).visited) {
@@ -90,24 +101,17 @@ export class Player {
             this.saveCheckpoint();
         }
 
-        if (this.world.tileAt([x, y]).flowerPoints > 0) {
-            if (this.currentItem === "scissors") {
-                this.cutFlowers();
-            } else if (this.currentItem === "watering_can") {
-                this.waterFlowers();
-            }
-        }
     }
 
-    cutFlowers() {
-        const dx = this.position[0] - this.previousPosition[0];
-        const dy = this.position[1] - this.previousPosition[1];
+    cutFlowers([x, y]) {
+        const dx = x - this.position[0];
+        const dy = y - this.position[1];
 
         if (dx === 0 && dy === 0) {
             return;
         }
 
-        const tilesInLine = this.world.level.floweredTilesInLine(this.previousPosition, [dx, dy]);
+        const tilesInLine = this.world.level.floweredTilesInLine(this.position, [dx, dy]);
         let total = 0;
         for (const tile of tilesInLine) {
             total += tile.flowerPoints;
@@ -121,15 +125,15 @@ export class Player {
         this.world.dispatchEvent("player-cut", null);
     }
 
-    waterFlowers() {
-        const dx = this.position[0] - this.previousPosition[0];
-        const dy = this.position[1] - this.previousPosition[1];
+    waterFlowers([x, y]) {
+        const dx = x - this.position[0];
+        const dy = y - this.position[1];
 
         if (dx === 0 && dy === 0) {
             return;
         }
 
-        const tilesInLine = this.world.level.floweredTilesInLine(this.previousPosition, [dx, dy]);
+        const tilesInLine = this.world.level.floweredTilesInLine(this.position, [dx, dy]);
 
         for (const tile of tilesInLine) {
             tile.flowerPoints = 2;
