@@ -15,13 +15,6 @@ function createOrthoCamera(pos) {
     return camera;
 }
 
-function createPerspectiveCamera(pos) {
-    const camera = new THREE.PerspectiveCamera(3, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.copy(pos);
-    camera.lookAt(0, 0, 0);
-    return camera;
-}
-
 export class World {
     constructor() {
         this.scene = new THREE.Scene();
@@ -29,7 +22,6 @@ export class World {
         this.eventListeners = {};
         this.lastT = 0.0;
         this.camera = createOrthoCamera(CAMERA_START_POSITION);
-        // this.camera = createPerspectiveCamera(CAMERA_START_POSITION);
         this.lights = createLights();
         this.lights.forEach(light => this.scene.add(light));
 
@@ -38,7 +30,6 @@ export class World {
         this.popSeeds = [];
 
         this.level = new Level2({ world: this });
-        // this.level.addToScene(this.scene);
 
         this.player = new Player({ world: this });
         this.player.addToScene(this.scene);

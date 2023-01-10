@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { AWARD_ITEM_GEOMETRY, MANDALA_POSITION_Y, TEXTURE_MANDALAS, TILE_SPACING, TILE_STAIRS_OFFSET } from '../constants';
+import { AWARD_ITEM_GEOMETRY, MANDALA_POSITION_Y, TILE_SPACING, TILE_STAIRS_OFFSET } from '../constants';
 
 export class AwardItem {
     constructor({ world, texture, position }) {
@@ -18,7 +18,6 @@ export class AwardItem {
             MANDALA_POSITION_Y + this.position[1] * TILE_STAIRS_OFFSET,
             this.position[1] * TILE_SPACING
         );
-        // this.mesh.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
         this.timer = 0.0;
         this.alive = true;
     }

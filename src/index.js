@@ -1,4 +1,3 @@
-import * as THREE from 'three';
 import { GameAudio } from './audio/GameAudio';
 import { AnimatedBackground } from './bg/AnimatedBackground';
 import { loadGltfModels } from './constants';
@@ -55,7 +54,7 @@ function newGame() {
     document.body.appendChild(RENDERER.domElement);
     ui.mount();
 
-    world.addEventListener("player-died", ({ score, moves }) => {
+    world.addEventListener("player-died", () => {
         gameOver({ ui, world });
     });
     world.addEventListener("return-to-menu", () => {
@@ -73,9 +72,7 @@ function newGame() {
 
 function mainMenu() {
 
-    // const bg = new AnimatedBackground({ el: document.getElementById("animated-background") });
     const menu = new MainMenu({
-        // bg,
         onStartGame: () => {
             menu.unmount();
             newGame();

@@ -1,5 +1,3 @@
-import * as THREE from "three";
-
 import { LEVEL_DATAS, TILETYPE_ID_AIR, TILETYPE_ID_AWARD, TILETYPE_ID_EXIT_EAST, TILETYPE_ID_EXIT_NORTH, TILETYPE_ID_EXIT_SOUTH, TILETYPE_ID_EXIT_WEST, TILETYPE_ID_NORMAL, TILETYPE_ID_SPAWN, TILETYPE_ID_TRAP, TILETYPE_ID_VISION, TILETYPE_ID_WALL, TILE_HEIGHT, TILE_MATERIALS, TUTORIAL_LEVEL_DATA, WALKABLE_TILE_MARKER_GEOMETRY, WALKABLE_TILE_MARKER_MATERIAL } from "../constants";
 import { Chunk } from "./Chunk";
 
@@ -20,19 +18,6 @@ function matchingExitFor({ tile, nextChunk }) {
     }
 }
 
-function nextChunkOffsetForExit({ tile, nextChunk }) {
-    switch (tile.type) {
-        case TILETYPE_ID_EXIT_NORTH:
-            return [0, -1];
-        case TILETYPE_ID_EXIT_SOUTH:
-            return [0, nextChunk.rowCount];
-        case TILETYPE_ID_EXIT_EAST:
-            return [1, 0];
-        case TILETYPE_ID_EXIT_WEST:
-            return [-1, 0];
-    }
-}
-
 export class Level2 {
     constructor({ world }) {
         this.world = world;
@@ -47,9 +32,6 @@ export class Level2 {
         this.world.addEventListener("player-moved-to", this.onPlayerMoved.bind(this));
 
         console.log(this);
-    }
-
-    addToScene(scene) {
     }
 
     generateInitialChunk() {
@@ -174,22 +156,6 @@ export class Level2 {
                     .forEach(tile => tile.topMesh.visible = false)
             );
         }
-    }
-
-    fixAwardTiles() {
-        this.chunks.forEach(
-            chunk => chunk.tiles.filter(tile => tile.type === TILETYPE_ID_AWARD)
-                .forEach(
-                    tile => {
-                        const progress = this.world.player.mandalaProgress[tile.mandalaType];
-                        if (progress >= 5) {
-                            tile.type = TILETYPE_ID_NORMAL;
-                            tile.topMesh.visible = false;
-                            tile.mesh.material = TILE_MATERIALS[TILETYPE_ID_NORMAL];
-                        }
-                    }
-                )
-        );
     }
 
     floweredTilesInLine(point, dir) {

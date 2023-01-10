@@ -20,10 +20,6 @@ export class Player {
         this.lives = this.maxLives;
         this.checkpoint = [1, 0];
         this.movementTimer = 0.0;
-        /* this.mesh = new THREE.Mesh(
-            PLAYER_GEOMETRY,
-            PLAYER_MATERIAL
-        ); */
         this.mesh = new THREE.Sprite(
             new THREE.SpriteMaterial({
                 map: TEXTURE_ICON_CHARACTER,
