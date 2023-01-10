@@ -69,10 +69,6 @@ export class Chunk {
             .forEach(tile => {
                 scene.remove(tile.flower);
             });
-
-        this.visionMarkers.forEach(marker => {
-            scene.remove(marker);
-        });
     }
 
     tileAt([x, y]) {
