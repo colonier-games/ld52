@@ -10,9 +10,9 @@ tar -czvf dist.tar.gz -C dist .
 shasum=$(sha256sum dist.tar.gz | awk '{print $1}' | tr -d '\n')
 
 echo "Deploying archive ..."
-gsutil cp dist.tar.gz gs://ld52.bokov.me/$shasum/dist.tar.gz
+gsutil cp dist.tar.gz gs://journey.bokov.me/$shasum/dist.tar.gz
 
 echo "Deploying to server ..."
-gcloud compute ssh botondjanoskovacs@bokov-me-website --zone europe-west4-a --command "gsutil cp gs://ld52.bokov.me/$shasum/dist.tar.gz /tmp/ld52.tar.gz && sudo rm -rf /var/www/ld52 && sudo mkdir /var/www/ld52 && cd /var/www/ld52 && sudo tar -xvf /tmp/ld52.tar.gz && rm /tmp/ld52.tar.gz"
+gcloud compute ssh botondjanoskovacs@bokov-me-website --zone europe-west4-a --command "gsutil cp gs://journey.bokov.me/$shasum/dist.tar.gz /tmp/journey.tar.gz && sudo rm -rf /var/www/journey && sudo mkdir /var/www/journey && cd /var/www/journey && sudo tar -xvf /tmp/journey.tar.gz && rm /tmp/journey.tar.gz"
 
 echo "Done."
