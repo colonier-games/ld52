@@ -24,7 +24,7 @@ export function MainMenuApp({
             const bg = new AnimatedBackground({ el: animBgDiv.current });
 
             bg.applyBackground({
-                svgUrl: achievementLevel === 0 ? SVG_LOGO : SVG_BACKGROUNDS[achievementLevel],
+                svgUrl: achievementLevel === 0 ? SVG_LOGO : SVG_BACKGROUNDS[achievementLevel - 1],
                 speed: 500
             });
 

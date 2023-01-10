@@ -22,6 +22,9 @@ export class AnimatedBackground {
         this.objectElement.onload = () => {
             const doc = this.objectElement.contentDocument;
             const svg = doc.querySelector("svg");
+            if (!svg) {
+                return;
+            }
             const allPaths = svg.querySelectorAll("path");
             const allPolygons = svg.querySelectorAll("polygon");
             const allRects = svg.querySelectorAll("rect");
